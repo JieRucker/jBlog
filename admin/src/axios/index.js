@@ -36,7 +36,7 @@ instance.interceptors.response.use(
       store.commit("adminLogout")  // token过期,清除
       router.replace({ //跳转到登录页面
           path: '/admin/login',
-          query: { redirect: router.currentRoute.fullPath } 
+          query: { redirect: router.currentRoute.fullPath }
       });
       return Promise.reject(error.response);
     }
@@ -52,6 +52,10 @@ export default {
   // 用户登录
   api_admin_login(data) {
     return instance.post('/api/admin/login', data);
+  },
+  // 用户注册
+  api_admin_register(data) {
+    return instance.post('/api/admin/register', data);
   },
   // 用户修改密码
   api_alter_admin(data) {

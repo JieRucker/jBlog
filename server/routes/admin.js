@@ -9,8 +9,11 @@ const Admin = require('../db').Admin;
 const adminModel = require('../models/admin');
 const sha1 = require('sha1');
 const SHA1_ADD_STR = "pawn_blog_encrypted_string";
-const {create_token, check_token_code} = require('../utils/token');
+const {create_token, check_token,check_token_code} = require('../utils/token');
 const Checkcode = require('../db').Checkcode;
+// const {check_token} = require('./utils/token');
+const Koa = require('koa');
+const app = new Koa();
 
 router.prefix('/api/admin');
 
@@ -36,7 +39,8 @@ router.post('/register', async ctx => {
             return;
         }
         let admin = new Admin({
-            admin_name, admin_id,
+            admin_name,
+            admin_id,
             admin_pwd: sha1(sha1(admin_pwd + SHA1_ADD_STR))
         });
         res = await admin.save();
@@ -62,6 +66,7 @@ router.post('/register', async ctx => {
 
 // 用户登录
 router.post('/login', async ctx => {
+    app.use(check_token);
     let {admin_id = '', admin_pwd = '', token = '', code = ''} = ctx.request.body;
 
     try {

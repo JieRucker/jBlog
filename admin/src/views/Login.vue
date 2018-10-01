@@ -17,6 +17,7 @@
       </div>
       <div class="login_item">
         <button @click="login">登录</button>
+        <button @click="register">注册</button>
       </div>
     </div>
   </div>
@@ -39,8 +40,22 @@ export default {
     }
   },
   methods: {
+    register(){
+      if(this.loginInfo.admin_id === '' || this.loginInfo.admin_pwd === ''){
+        return alert("请填写完，登录信息！！");
+      }
+
+      this.$http.api_admin_register({
+        admin_name:this.loginInfo.admin_id,
+        admin_id: this.loginInfo.admin_id,
+        admin_pwd: this.loginInfo.admin_pwd,
+      }).then(res=>{
+        let {msg} = res.data;
+        alert(msg)
+      })
+    },
     login() {
-      if(this.loginInfo.admin_id == '' || this.loginInfo.admin_pwd == '' || this.loginInfo.code == ''){
+      if(this.loginInfo.admin_id === '' || this.loginInfo.admin_pwd === '' || this.loginInfo.code === ''){
         alert("请填写完，登录信息！！");
         return;
       }
@@ -78,7 +93,7 @@ export default {
 </script>
 
 
-<style lang="scss"> 
+<style lang="scss">
   .login {
     $color:#92ACC3;
     background: url('http://image.lcylove.cn/16598d602ac_571542a9');
@@ -135,7 +150,7 @@ export default {
           &:focus {
             border-bottom-color: red;
           }
-          
+
         }
         img {
           position: absolute;
