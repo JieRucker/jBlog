@@ -15,7 +15,7 @@ const Checkcode = require('../db').Checkcode;
 router.prefix('/api/admin');
 
 // 用户注册
-router.post('/master', async ctx => {
+router.post('/register', async ctx => {
     let {admin_name = '', admin_id = '', admin_pwd = ''} = ctx.request.body;
 
     try {
