@@ -1,24 +1,41 @@
-# 博客系统
+# 个人博客系统
 
-- vue + node + mongodb
-- 评论采用gitalk插件
+>  前端 => vue全家桶
+>
+> 后台 => nodejs koa2
+>
+> 数据库 => mongodb mongoose
+>
+> 服务器 => centOS 7 nginx
+>
+> 图片保存/静态资源 => 七牛云
+>
+> admin文件夹是博客后台管理界面代码，client是博客的前台显示页面代码，server是后台服务器代码。
 
-仓库：[https://github.com/JieRucker/jBlog](https://github.com/JieRucker/jBlog)
+博客的评论采用gitalk插件，内容就存放在此仓库的 issues
 
-博客地址： [blog.jrucker.cn](http://blog.jrucker.cn)
+博客地址： [blog.lcylove.cn](http://blog.lcylove.cn)
 
-## 构建
+文章地址：[http://blog.lcylove.cn/#/article/5b90e35e4dbed74425889238](http://blog.lcylove.cn/#/article/5b90e35e4dbed74425889238)
 
-``` bash
-# install dependencies
-npm install
+## Run
 
-# serve with hot reload at localhost:8080
-npm run dev
+1. clone 本仓库到本地
 
-# build for production with minification
-npm run build
+2. 打开mongodb服务，开启mongodb数据库
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
+3. 进入server文件夹,打开node服务
+
+   ```bash
+   cd ./server
+   npm i & cnpm i
+   npm start
+   ```
+
+4. 进入admin文件夹或client文件夹
+
+   ```bash
+   cd ./admin & cd ./client
+   npm i & cnpm i
+   npm run dev
+   ```
