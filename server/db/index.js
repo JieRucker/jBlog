@@ -52,6 +52,7 @@ let AdminSchema = new Schema({
     },
 });
 
+
 // 全局设置表
 let settingSchema = new Schema({
     myInfo: {
