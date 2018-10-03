@@ -1,0 +1,52 @@
+@import './util.scss';
+
+ul, li {
+  list-style: none outside none;
+}
+
+.height-100 {
+  height: 100%;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.clearfix:after, .clearfix:before, .modal-footer:after, .modal-footer:before {
+  display: table;
+  content: " "
+}
+
+.clearfix:after, .modal-footer:after {
+  clear: both
+}
+
+@include b(green) {
+  color: #9ACD32;
+}
+
+@include b(red) {
+  color: #ff0000;
+}
+
+@include b(yellow) {
+  color: #EEC900;
+}
+
+@include b(orange) {
+  color: #EE7600;
+}
+
+@include b(blue) {
+  color: #436EEE;
+}
+
+@include b(purple) {
+  color: #8A2BE2;
+}
+
+@mixin text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

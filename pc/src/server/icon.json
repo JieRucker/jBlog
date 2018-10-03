@@ -1,0 +1,42 @@
+{
+  "result": [
+    {
+      "type": 0,
+      "label": "图标一",
+      "list": [
+        {
+          "iconUrl": "http://qrcodep.westlakevr.cn:9003/static/images/icon/avatar.png"
+        },
+        {
+          "iconUrl": "http://qrcodep.westlakevr.cn:9003/static/images/icon/avatar.png"
+        }
+      ]
+    },
+    {
+      "type": 1,
+      "label": "图标二",
+      "list": [
+        {
+          "iconUrl": "http://qrcodep.westlakevr.cn:9003/static/images/card/avatar_default.png"
+        },
+        {
+          "iconUrl": "http://qrcodep.westlakevr.cn:9003/static/images/card/avatar_default.png"
+        }
+      ]
+    },
+    {
+      "type": 2,
+      "label": "图标三",
+      "list": [
+        {
+          "iconUrl": "http://qrcodep.westlakevr.cn:9003/static/images/card/card_bg.jpg"
+        },
+        {
+          "iconUrl": "http://qrcodep.westlakevr.cn:9003/static/images/card/card_bg.jpg"
+        }
+      ]
+    }
+  ],
+  "success": true,
+  "code": 200
+}
