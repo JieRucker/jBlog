@@ -92,7 +92,7 @@
         return this.$store.state.user.adminInfo.admin_name;
       },
       getAvator() {
-        return '/static/img/avatar.jpg';
+        return '/static/images/logo/avatar.jpg';
       },
       menuList() {
         return this.$store.state.app.menuList;
