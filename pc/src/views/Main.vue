@@ -11,11 +11,11 @@
         :menu-list="menuList">
         <div slot="top" class="main-container__logo">
                     <span class="main-container__logo--shrink" v-show="!shrink">
-                        <img src="../assets/images/logo/logo-min.png" key="max-logo"/>
-                        <h3>产品管理系统</h3>
+                        <!--<img src="../assets/images/logo/logo-min.png" key="max-logo"/>-->
+                        <h3>J.Rucker的博客</h3>
                     </span>
           <span class="main-container__logo--shrink-min" v-show="shrink">
-                        <img v-show="shrink" src="../assets/images/logo/logo-min.png" key="min-logo"/>
+                        <!--<img v-show="shrink" src="../assets/images/logo/logo-min.png" key="min-logo"/>-->
                     </span>
         </div>
       </shrinkable-menu>
@@ -89,10 +89,10 @@
     },
     computed: {
       getLoginName() {
-        return (typeof getStrLoginName !== 'undefined') ? getStrLoginName : '';
+        return this.$store.state.user.adminInfo.admin_name;
       },
       getAvator() {
-        return (typeof getStrHeadUrl !== 'undefined') ? getStrHeadUrl : '';
+        return '/static/img/avatar.jpg';
       },
       menuList() {
         return this.$store.state.app.menuList;
@@ -128,10 +128,12 @@
           }).catch(err => console.error(err))
       }
     },
-    watch: {
+   /* watch: {
       '$route'(to) {
+        // console.log(34)
+        // this.$store.commit('updateMenulist');
         util.setCurrentPath(this, to.name)
       }
-    }
+    }*/
   };
 </script>

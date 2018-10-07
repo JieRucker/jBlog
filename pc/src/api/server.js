@@ -5,11 +5,11 @@
 
 import loginInterface from './LoginInterface';
 import mainInterface from './MainInterface';
-import qrcodeInterface from './QrcodeInterface';
+import articleInterface from './ArticleInterface';
 
 export default {
   loginInterface,
   mainInterface,
-  qrcodeInterface,
+  articleInterface,
 }
 

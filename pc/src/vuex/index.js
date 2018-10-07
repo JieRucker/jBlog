@@ -16,7 +16,7 @@ const store = new Vuex.Store({
     app,
     user,
     async,
-    qrcode
+    qrcode,
   }
 });
 

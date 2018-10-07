@@ -54,6 +54,11 @@
     mounted() {
       this.init();
     },
+    watch: {
+      '$route'(to) {
+        this.init()
+      }
+    },
     methods: {
       init() {
         util.getCurrentNode(this.menuList, this.$route.name, (data) => {

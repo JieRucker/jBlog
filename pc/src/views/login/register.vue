@@ -13,25 +13,11 @@
         <div class="auth-login__content--form">
           <Form ref="registerForm" :model="form" :rules="rules">
             <FormItem prop="phoneNum">
-              <Input v-model="form.phoneNum" placeholder="请输入手机号">
+              <Input v-model="form.phoneNum" placeholder="请输入用户名">
               <span slot="prepend">
                 <Icon :size="16" type="person"></Icon>
               </span>
               </Input>
-            </FormItem>
-            <FormItem prop="vericode">
-              <Row>
-                <Col span="15">
-                  <Input type="text" v-model="form.vericode" placeholder="请输入验证码">
-                  <span slot="prepend">
-                    <Icon :size="16" type="person"></Icon>
-                  </span>
-                  </Input>
-                </Col>
-                <Col span="4" offset="1">
-                  <Button type="ghost" :disabled="vaildcode" @click="getCode($event)">发送验证码</Button>
-                </Col>
-              </Row>
             </FormItem>
             <FormItem prop="passwd">
               <Input type="password" v-model="form.passwd" placeholder="必须包含英文、数字且8-16位">
@@ -97,16 +83,12 @@
       return {
         form: {
           phoneNum: '',
-          vericode: '',
           passwd: '',
           passwdCheck: ''
         },
         rules: {
           phoneNum: [
-            {required: true, message: '手机号不能为空', trigger: 'blur'}
-          ],
-          vericode: [
-            {required: true, message: '验证码不能为空', trigger: 'blur'}
+            {required: true, message: '用户名不能为空', trigger: 'blur'}
           ],
           passwd: [
             {validator: validatePass, trigger: 'blur'}
@@ -114,105 +96,37 @@
           passwdCheck: [
             {validator: validatePassCheck, trigger: 'blur'}
           ]
-        },
-        time: 60, //验证码倒计时时间
-        vaildcode: false,
-        publicKey: ''
+        }
       };
     },
     computed: {
       loginStyle() {
         return {
-          backgroundImage: `url(${process.env.api.staticUrl}static/images/login/login_bg.jpg)`,
+          // backgroundImage: `url(${process.env.api.staticUrl}static/images/login/login_bg.jpg)`,
+          backgroundImage: `url(static/images/login/login-bg.jpg)`,
         }
       }
     },
     methods: {
-      listPublicKey(cb) {
-        this.$api.loginInterface.sendPublickey()
-          .then(res => {
-            if (res.data.success) {
-              this.publicKey = res.data.data;
-              cb && cb();
-            }
-          }).catch(err => {
-          console.error(err)
-        })
-      },
-      getRSApassword(publicKey, password) {
-        let encrypt = new this.$JSEncrypt.JSEncrypt();
-        encrypt.setPublicKey(publicKey);
-        return encrypt.encrypt(password);
-      },
-      // 发送验证码
-      getCode(e) {
-        let reg = /^(\+?0?86\-?)?1[3456789]\d{9}$/;
-
-        if (this.$Global.isBlank(this.form.phoneNum)) {
-          return this.$Message.info('请输入手机号！');
-        } else if (!reg.test(this.form.phoneNum)) {
-          return this.$Message.info('请输入正确的手机号！');
-        } else {
-          this.$api.loginInterface.isRegisted({
-            loginName: this.form.phoneNum
-          }).then(res => {
-            if (res.data.success) {
-              if (res.data.retCode == 1) {
-                this.$api.loginInterface.sendVerifyCode({
-                  loginName: this.form.phoneNum,
-                  type: 0
-                }).then(res => {
-                  if (res.data.success) {
-                    this.$Message.info(res.data.retMsg);
-                    this.vaildcode = true;
-                    let timer = setInterval(() => {
-                      this.time--;
-                      e.target.innerText = this.time + 's重新获取';
-
-                      if (this.time == 0) {
-                        e.target.innerText = '重新获取';
-                        clearInterval(timer);
-                        this.time = 60;
-                        this.vaildcode = false;
-                      }
-                    }, 1000)
-                  } else {
-                    this.$Message.info(res.data.retMsg);
-                  }
-                }).catch(err => {
-                  console.error(err)
-                });
-              } else if (res.data.retCode == 2) {
-                this.$Message.info('此手机号已经注册过，请换一个重试！');
-              }
-            } else {
-              this.$Message.info(res.data.retMsg);
-            }
-          }).catch(err => {
-            console.error(err)
-          })
-        }
-      },
       handleSubmit() {
-        this.$refs.registerForm.validate((valid) => {
+        this.$refs.registerForm.validate(valid => {
           if (valid) {
-            this.listPublicKey(() => {
-              this.$api.loginInterface.register({
-                loginName: this.form.phoneNum,
-                password: this.getRSApassword(this.publicKey, this.form.passwdCheck),
-                vericode: this.form.vericode
-              }).then(res => {
-                if (res.data.success) {
-                  this.$Message.info('注册成功！');
-                  this.$router.push({
-                    name: 'login'
-                  });
-                } else {
-                  this.$Message.info(res.data.retMsg);
-                }
-              }).catch(err => {
-                console.error(err)
-              });
+            this.$api.loginInterface.register({
+              admin_name: this.form.phoneNum,
+              admin_id: this.form.phoneNum,
+              admin_pwd:this.form.passwdCheck,
+            }).then(res => {
+              res = res.data;
+              if (res.code === 200) {
+                this.$Message.info('注册成功！');
+                this.$router.push({
+                  name: 'login'
+                });
+              } else {
+                this.$Message.info(res.msg);
+              }
+            }).catch(err => {
+              console.error(err)
             });
           }
         });

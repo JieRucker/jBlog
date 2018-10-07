@@ -1,5 +1,22 @@
 import Main from '@/views/Main.vue';
 
+export const loginRouter = [
+  {
+    path: '/login',
+    icon: 'android-apps',
+    name: 'login',
+    title: '登录',
+    component: () => import('@/views/login/login.vue')
+  },
+  {
+    path: '/register',
+    icon: 'android-apps',
+    name: 'register',
+    title: '注册',
+    component: () => import('@/views/login/register.vue')
+  }
+];
+
 // 作为Main组件的子页面展示但是不在左侧菜单显示的路由写在otherRouter里
 export const otherRouter = {
   path: '/',
@@ -38,150 +55,137 @@ export const otherRouter = {
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
   {
-    path: '/login',
+    path: '/article',
     icon: 'android-apps',
-    name: 'login',
-    title: '登录',
-    component: () => import('@/views/login/login.vue')
-  },
-  {
-    path: '/register',
-    icon: 'android-apps',
-    name: 'register',
-    title: '注册',
-    component: () => import('@/views/login/register.vue')
-  },
-  {
-    path: '/resetPassword',
-    icon: 'android-apps',
-    name: 'resetPassword',
-    title: '重置密码',
-    component: () => import('@/views/login/resetPassword.vue')
-  },
-  /*{
-    path: '/manage',
-    icon: 'android-apps',
-    name: 'manage',
-    title: '解决方案管理',
+    name: 'article',
+    title: '文章',
     component: Main,
     children: [
       {
-        path: 'qrcode',
-        title: '产品管理',
-        name: 'qrcode',
+        path: 'article-list',
+        title: '文章列表',
+        name: 'article-list',
         icon: 'android-funnel',
         crumb: [
           {
             path: '',
-            title: '解决方案管理',
-            name: 'manage',
+            title: '文章',
+            name: 'article',
           },
           {
-            path: '/manage/qrcode',
-            title: '产品管理',
-            name: 'qrcode',
+            path: '/article/article-list',
+            title: '文章列表',
+            name: 'article-list',
           }
         ],
-        component: () => import('@/views/qrcode/qrcode.vue'),
-      },
-      /!*{
-        path: 'record-list',
-        title: '维护明细',
-        name: 'record-list',
-        icon: 'arrow-swap',
-        crumb: [
-          {
-            path: '',
-            title: '解决方案管理',
-            name: 'manage',
-          },
-          {
-            path: '/manage/record-list',
-            title: '维护明细',
-            name: 'record-list',
-          }
-        ],
-        component: () => import('@/views/record/record-list.vue')
-      },*!/
-      {
-        path: 'statistic-list',
-        title: '维护统计',
-        name: 'statistic-list',
-        icon: 'stats-bars',
-        crumb: [
-          {
-            path: '',
-            title: '解决方案管理',
-            name: 'manage',
-          },
-          {
-            path: '/manage/statistic-list',
-            title: '维护统计',
-            name: 'statistic-list',
-          }
-        ],
-        component: () => import('@/views/statistic/statistic-list.vue')
+        component: () => import('@/views/article/article-list.vue'),
       },
       {
-        path: 'auth-list',
-        title: '权限设置',
-        name: 'auth-list',
-        icon: 'settings',
+        path: 'create-article',
+        title: '写文章',
+        name: 'create-article',
+        icon: 'android-funnel',
         crumb: [
           {
             path: '',
-            title: '解决方案管理',
-            name: 'manage',
+            title: '文章',
+            name: 'article',
           },
           {
-            path: '/manage/auth-list',
-            title: '权限设置',
-            name: 'auth-list',
+            path: '/article/create-article',
+            title: '写文章',
+            name: 'create-article',
           }
         ],
-        component: () => import('@/views/author/index.vue')
-      },
-      {
-        path: 'record-tpl',
-        title: '维护模板',
-        name: 'record-tpl',
-        icon: 'settings',
-        crumb: [
-          {
-            path: '',
-            title: '解决方案管理',
-            name: 'manage',
-          },
-          {
-            path: '/manage/record-tpl',
-            title: '维护模板',
-            name: 'record-tpl',
-          }
-        ],
-        component: () => import('@/views/record-tpl/record-tpl.vue')
-      },
-      {
-        path: 'state-list',
-        title: '状态模板',
-        name: 'state-list',
-        icon: 'settings',
-        crumb: [
-          {
-            path: '',
-            title: '解决方案管理',
-            name: 'manage',
-          },
-          {
-            path: '/manage/state-list',
-            title: '状态模板',
-            name: 'state-list',
-          }
-        ],
-        component: () => import('@/views/state/state-list.vue')
+        component: () => import('@/views/article/create-article.vue'),
       }
     ]
-  },*/
-/*  {
+  },
+  {
+    path: '/tags',
+    icon: 'android-apps',
+    name: 'tags',
+    title: '标签',
+    component: Main,
+    children: [
+      {
+        path: 'tags-list',
+        title: '标签列表',
+        name: 'tags-list',
+        icon: 'android-funnel',
+        crumb: [
+          {
+            path: '',
+            title: '标签',
+            name: 'manage',
+          },
+          {
+            path: '/tags/tags-list',
+            title: '标签列表',
+            name: 'tags-list',
+          }
+        ],
+        component: () => import('@/views/tags/tags-list.vue'),
+      },
+    ]
+  },
+  {
+    path: '/works',
+    icon: 'android-apps',
+    name: 'works',
+    title: '作品',
+    component: Main,
+    children: [
+      {
+        path: 'works-list',
+        title: '作品列表',
+        name: 'works-list',
+        icon: 'android-funnel',
+        crumb: [
+          {
+            path: '',
+            title: '作品',
+            name: 'works',
+          },
+          {
+            path: '/works/works-list',
+            title: '作品列表',
+            name: 'works-list',
+          }
+        ],
+        component: () => import('@/views/works/works-list.vue'),
+      },
+    ]
+  },
+  {
+    path: '/upload',
+    icon: 'android-apps',
+    name: 'upload',
+    title: '上传',
+    component: Main,
+    children: [
+      {
+        path: 'pic-list',
+        title: '图片列表',
+        name: 'pic-list',
+        icon: 'android-funnel',
+        crumb: [
+          {
+            path: '',
+            title: '上传',
+            name: 'upload',
+          },
+          {
+            path: '/upload/pic-list',
+            title: '图片列表',
+            name: 'pic-list',
+          }
+        ],
+        component: () => import('@/views/upload/pic-list.vue'),
+      },
+    ]
+  },
+  {
     path: '/setting',
     icon: 'android-apps',
     name: 'setting',
@@ -190,9 +194,9 @@ export const appRouter = [
     // hideSubMenu: true,
     children: [
       {
-        path: 'card-list',
-        title: '名片码',
-        name: 'card-list',
+        path: 'setting',
+        title: '全局设置',
+        name: 'setting',
         icon: 'android-funnel',
         crumb: [
           {
@@ -201,38 +205,20 @@ export const appRouter = [
             name: 'setting',
           },
           {
-            path: '/setting/card-list',
-            title: '名片码',
-            name: 'card-list',
-          }
-        ],
-        component: () => import('@/views/card/card-list.vue')
-      },
-      {
-        path: 'material-list',
-        title: '素材',
-        name: 'material-list',
-        icon: 'android-funnel',
-        crumb: [
-          {
-            path: '',
-            title: '设置',
+            path: '/setting/setting',
+            title: '全局设置',
             name: 'setting',
-          },
-          {
-            path: '/setting/material-list',
-            title: '素材',
-            name: 'material-list',
           }
         ],
-        component: () => import('@/views/material/material-list.vue')
+        component: () => import('@/views/setting/setting.vue')
       }
     ]
-  }*/
+  }
 ];
 
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [
+  ...loginRouter,
   otherRouter,
   ...appRouter,
 ];
