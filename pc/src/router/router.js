@@ -1,4 +1,5 @@
 import Main from '@/views/Main.vue';
+import crumb from './crumb';
 
 export const loginRouter = [
   {
@@ -66,18 +67,7 @@ export const appRouter = [
         title: '文章列表',
         name: 'article-list',
         icon: 'android-funnel',
-        crumb: [
-          {
-            path: '',
-            title: '文章',
-            name: 'article',
-          },
-          {
-            path: '/article/article-list',
-            title: '文章列表',
-            name: 'article-list',
-          }
-        ],
+        crumb: crumb.article_list,
         component: () => import('@/views/article/article-list.vue'),
       },
       {
@@ -85,18 +75,7 @@ export const appRouter = [
         title: '写文章',
         name: 'create-article',
         icon: 'android-funnel',
-        crumb: [
-          {
-            path: '',
-            title: '文章',
-            name: 'article',
-          },
-          {
-            path: '/article/create-article',
-            title: '写文章',
-            name: 'create-article',
-          }
-        ],
+        crumb: crumb.create_artcle,
         component: () => import('@/views/article/create-article.vue'),
       }
     ]
@@ -113,18 +92,7 @@ export const appRouter = [
         title: '标签列表',
         name: 'tags-list',
         icon: 'android-funnel',
-        crumb: [
-          {
-            path: '',
-            title: '标签',
-            name: 'manage',
-          },
-          {
-            path: '/tags/tags-list',
-            title: '标签列表',
-            name: 'tags-list',
-          }
-        ],
+        crumb: crumb.tags_list,
         component: () => import('@/views/tags/tags-list.vue'),
       },
     ]
@@ -141,18 +109,7 @@ export const appRouter = [
         title: '作品列表',
         name: 'works-list',
         icon: 'android-funnel',
-        crumb: [
-          {
-            path: '',
-            title: '作品',
-            name: 'works',
-          },
-          {
-            path: '/works/works-list',
-            title: '作品列表',
-            name: 'works-list',
-          }
-        ],
+        crumb: crumb.works_list,
         component: () => import('@/views/works/works-list.vue'),
       },
     ]
@@ -169,18 +126,7 @@ export const appRouter = [
         title: '图片列表',
         name: 'pic-list',
         icon: 'android-funnel',
-        crumb: [
-          {
-            path: '',
-            title: '上传',
-            name: 'upload',
-          },
-          {
-            path: '/upload/pic-list',
-            title: '图片列表',
-            name: 'pic-list',
-          }
-        ],
+        crumb: crumb.pic_list,
         component: () => import('@/views/upload/pic-list.vue'),
       },
     ]
@@ -198,18 +144,7 @@ export const appRouter = [
         title: '全局设置',
         name: 'setting',
         icon: 'android-funnel',
-        crumb: [
-          {
-            path: '',
-            title: '设置',
-            name: 'setting',
-          },
-          {
-            path: '/setting/setting',
-            title: '全局设置',
-            name: 'setting',
-          }
-        ],
+        crumb: crumb.setting,
         component: () => import('@/views/setting/setting.vue')
       }
     ]

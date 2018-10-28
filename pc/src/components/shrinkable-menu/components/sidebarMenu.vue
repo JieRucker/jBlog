@@ -27,8 +27,6 @@
 </template>
 
 <script>
-  import util from '@/libs/util.js';
-
   export default {
     name: 'sidebarMenu',
     props: {
@@ -46,25 +44,12 @@
         default: false
       }
     },
-    data() {
-      return {
-        activeMenuItem: null,
-      }
-    },
-    mounted() {
-      this.init();
-    },
-    watch: {
-      '$route'(to) {
-        this.init()
+    computed: {
+      activeMenuItem() {
+        return this.$store.state.app.activeMenuItem
       }
     },
     methods: {
-      init() {
-        util.getCurrentNode(this.menuList, this.$route.name, (data) => {
-          this.activeMenuItem = data.node.activeMenuItem ? data.node.activeMenuItem : this.$route.name;
-        });
-      },
       onSelect(active) {
         this.$emit('on-change', active);
       },
@@ -84,6 +69,5 @@
         this.$refs.sideMenu && this.$refs.sideMenu.updateOpened();
       });
     }
-
   };
 </script>

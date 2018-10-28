@@ -14,11 +14,10 @@
       </FormItem>
 
       <FormItem label="搜索">
-        <Input v-model="search.keyword" placeholder="请输入关键词">
-        <Button slot="append" icon="ios-search" @click="handleSearch"></Button>
-        </Input>
+        <Input v-model="search.keyword" placeholder="请输入关键词"></Input>
       </FormItem>
-      <Button type="primary" @click="handleArticle">写文章</Button>
+      <Button type="primary" @click="handleSearch">搜索</Button>
+      <Button type="default" style="margin-left: 10px" @click="handleArticle">写文章</Button>
     </Form>
 
     <Table :columns="table.header" :data="table.body"></Table>
@@ -141,7 +140,12 @@
                     },
                     on: {
                       click: () => {
-
+                        this.$router.push({
+                          name: 'create-article',
+                          query: {
+                            _id: params.row._id
+                          }
+                        })
                       }
                     }
                   }, '修改'),
@@ -191,23 +195,22 @@
         _id: -1
       });
 
-      this.getArticle();
+      this.getArticleList();
     },
     methods: {
-      async getArticle() {
+      async getArticleList() {
         let a = {
           keyword: this.search.keyword,
           tag: this.search.tag === -1 ? '' : this.search.tag,
           state: this.search.state === -1 ? '' : this.search.state
         };
-        await this.$api.articleInterface.getArticle({...a, ...this.table.args})
-          .then(res => {
-            res = res.data;
-            if (res.code === 200) {
-              this.table.body = res.data.list;
-              this.table.args.total_count = res.data.pagination.total;
-            }
-          }).catch(err => console.error(err))
+
+        let res = await this.$api.articleInterface.getArticleList({...a, ...this.table.args});
+        let {code, data = {}} = res.data;
+        if (code === 200) {
+          this.table.body = data.list;
+          this.table.args.total_count = data.pagination.total;
+        }
       },
       handleArticle() {
         this.$router.push({
@@ -216,11 +219,11 @@
       },
       handleSearch() {
         this.search.current_page = 1;
-        this.getArticle();
+        this.getArticleList();
       },
       changePage(targetPage) {
         this.table.args.current_page = targetPage;
-        this.getArticle();
+        this.getArticleList();
       },
       formatDate(val) {
         let time = new Date(Number(val));

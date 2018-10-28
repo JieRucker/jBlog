@@ -25,6 +25,10 @@ class BaseModule {
     return this.$http.post(url, data, {...this.dataMethodDefaults, ...config})
   }
 
+  patch(url, data = undefined, config = {}) {
+    return this.$http.patch(url, data, {...this.dataMethodDefaults, ...config})
+  }
+
   put(url, data = undefined, config = {}) {
     return this.$http.put(url, data, {...this.dataMethodDefaults, ...config})
   }

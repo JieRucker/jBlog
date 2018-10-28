@@ -48,42 +48,47 @@ util.handleTitle = function (vm, item) {
   }
 };
 
+util.getCurrentNode = async function (list, keyword, nodes, cb) {
+  if (Object.keys(keyword).length > 1) {
+    throw new Error('Expression only one object length')
+  }
+  let parentNode = null;
+  let node = null;
+  let [name] = Object.keys(keyword);
+  let value = keyword[name];
+  const func = await (() => {
+    return (list, value) => {
+      for (let i = 0; i < list.length; i++) {
+        if (node) break;
+        let obj = list[i];
+        if (!obj || !obj[name]) continue;
 
-util.parentNode = null;
-util.node = null;
-util.getCurrentNode = function (menuList, name, cb) {
-  for (let i = 0; i < menuList.length; i++) {
-    if (util.node) break;
-    let obj = menuList[i];
-    if (!obj || !obj.name) continue;
-
-    if (obj.name === name) {
-      util.node = obj;
-      break;
-    } else {
-      if (obj.children) {
-        util.parentNode = obj;
-        util.getCurrentNode(obj.children, name);
+        if (obj[name] === value) {
+          node = obj;
+          break;
+        } else {
+          if (obj[nodes]) {
+            parentNode = obj;
+            func(obj[nodes], value);
+          }
+        }
       }
     }
-  }
+  })();
 
-  setTimeout(() => {
-    util.node || (util.parentNode = '无父节点');
+  func(list, value);
 
-    if (typeof cb !== 'undefined') {
-      cb.call(null, {
-        parentNode: util.parentNode,
-        node: util.node
-      })
-    }
-  }, 50)
+  await (() => {
+    node || (parentNode = '无父节点');
+    cb && cb.call(null, {
+      parentNode: parentNode,
+      node: node
+    })
+  })()
 };
 
 util.setCurrentPath = function (vm, name) {
-  util.parentNode = null;
-  util.node = null;
-  util.getCurrentNode(vm.$store.state.app.routers, name, function (data) {
+  util.getCurrentNode(vm.$store.state.app.routers, {name: name}, 'children', data => {
     vm.$store.commit('setCurrentPath', (() => {
       let a = null;
       if (typeof data.node.crumb === 'function') {
@@ -93,6 +98,11 @@ util.setCurrentPath = function (vm, name) {
       }
       return a;
     })());
+
+    vm.$store.commit('setActiveMenuItem', {
+      data: data,
+      name: vm.$route.name
+    });
   });
 };
 

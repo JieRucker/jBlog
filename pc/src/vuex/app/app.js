@@ -8,6 +8,7 @@ const app = {
     themeColor: '',
     currentPath: [], // 面包屑数组
     menuList: [],
+    activeMenuItem: null, /*活动菜单*/
     routers: [
       otherRouter,
       ...appRouter
@@ -43,6 +44,9 @@ const app = {
     },
     setCurrentPath(state, pathArr) {
       state.currentPath = pathArr;
+    },
+    setActiveMenuItem(state, obj) {
+      state.activeMenuItem = obj.data.node.activeMenuItem || obj.name;
     }
   }
 };

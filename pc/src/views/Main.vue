@@ -128,12 +128,10 @@
           }).catch(err => console.error(err))
       }
     },
-   /* watch: {
+    watch: {
       '$route'(to) {
-        // console.log(34)
-        // this.$store.commit('updateMenulist');
         util.setCurrentPath(this, to.name)
       }
-    }*/
+    }
   };
 </script>
