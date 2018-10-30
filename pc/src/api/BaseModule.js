@@ -2,11 +2,8 @@ import axios from 'axios'
 import qs from 'query-string'
 
 class BaseModule {
-  constructor(options) {
-    this.baseUrl = typeof options.baseUrl !== 'undefined' ? options.baseUrl : process.env.api.commonUrl;
-    this.$http = axios.create({
-      baseUrl: this.baseUrl
-    });
+  constructor() {
+    this.$http = axios.create();
     this.dataMethodDefaults = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'

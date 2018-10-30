@@ -1,7 +1,33 @@
+<style lang="scss">
+  .editor-toolbar {
+    font-size: 16px;
+  }
+
+  .CodeMirror-wrap {
+    font-size: 16px !important;
+  }
+
+  .editor-preview-side {
+    font-size: 16px;
+  }
+</style>
+
+<style lang="scss" scoped>
+  .file {
+    opacity: 0;
+    position: absolute;
+    top: -999px;
+  }
+
+  .upload-md {
+    margin-left: 10px;
+    cursor: pointer;
+    vertical-align: middle
+  }
+</style>
+
 <template>
   <div>
-
-
     <Form :label-width="60">
       <FormItem label="标题：">
         <Input v-model="article.title" placeholder="请输入名称" style="width: 50%"></Input>
@@ -28,8 +54,9 @@
 
     <textarea class="markdown-content" id="markdown-content" v-markdown>
     </textarea>
-
+    <input type="file" id="uploadMD" @change="getFile" class="file">
     <Button type="primary" @click="publishHandler">发表</Button>
+    <label for="uploadMD" class="upload-md">上传MD</label>
   </div>
 </template>
 
@@ -76,11 +103,27 @@
       }
     },
     mounted() {
-      simplemde.value("```javascript```");
       this.getTagList();
       this.getArticleById();
     },
     methods: {
+      getFile(e) {
+        let obj = e.target || null;
+        let fileName = obj.files[0].name;
+        let fileReader = new FileReader();
+        if (fileName.slice(fileName.lastIndexOf(".") + 1).toLowerCase() !== 'md') {
+          return this.$Message.info('请上传markdown的文件');
+        }
+        fileReader.readAsText(obj.files[0]);
+        fileReader.onload = function () {
+          let result = this.result;
+          try {
+            simplemde.value(result);
+          } catch (e) {
+            console.error("Storage failed: " + e);
+          }
+        }
+      },
       /*发表*/
       async publishHandler() {
         let res;
@@ -103,7 +146,7 @@
         return this.$Message.info(msg)
       },
       async getArticleById() {
-        let res = await this.$api.articleInterface.getArticleById({id: this.$route.query._id});
+        let res = await this.$api.articleInterface.getArticleById({_id: this.$route.query._id});
         let {code, data} = res.data;
         if (code === 200 && data.length) {
           let [a] = data;
@@ -123,7 +166,7 @@
         }
       },
       async getTagList() {
-        let res = await this.$api.articleInterface.getTags();
+        let res = await this.$api.tagsInterface.getTagsList();
         let {article_num_list = [], tags_list = []} = res.data.data;
         tags_list.forEach(item => {
           item.checked = false;

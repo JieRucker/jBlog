@@ -156,7 +156,16 @@
                     },
                     on: {
                       click: () => {
-
+                        this.$Modal.confirm({
+                          title: '提示',
+                          content: '<p>确定删除？</p>',
+                          onOk: async () => {
+                            let res = await this.$api.articleInterface.deleteArticleById({_id: params.row._id});
+                            let {msg} = res.data;
+                            this.getArticleList();
+                            return this.$Message.info(msg)
+                          }
+                        });
                       }
                     }
                   }, '删除')
@@ -175,15 +184,12 @@
       }
     },
     async created() {
-      let res = await this.$api.articleInterface.getTags();
+      let res = await this.$api.tagsInterface.getTagsList();
       let {article_num_list = [], tags_list = []} = res.data.data;
       tags_list.forEach(item => {
-        let temp = article_num_list.find(i => {
-          return i._id == item._id;
-        });
+        let temp = article_num_list.find(i => i._id === item._id);
         item.tags_article_num = temp == null ? 0 : temp.count;
       });
-
 
       this.tagList = tags_list.sort((a, b) => {
         return a.tags_article_num < b.tags_article_num;

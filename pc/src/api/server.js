@@ -6,10 +6,12 @@
 import loginInterface from './LoginInterface';
 import mainInterface from './MainInterface';
 import articleInterface from './ArticleInterface';
+import tagsInterface from './TagsInterface';
 
 export default {
   loginInterface,
   mainInterface,
   articleInterface,
+  tagsInterface
 }
 

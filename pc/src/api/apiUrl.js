@@ -5,8 +5,8 @@ const build = {
 };
 const build_dev = {
   staticUrl: 'http://qrcodep.westlakevr.cn:9003/', // 静态资源路径
-  commonUrl: 'http://qrcodep.qimiaowa.com:9003',
-  authUrl: 'http://qrcode.qimiaowa.com:9005'
+  commonUrl: '',
+  authUrl: ''
 };
 
 module.exports = {build, build_dev};
