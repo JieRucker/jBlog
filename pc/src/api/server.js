@@ -7,11 +7,13 @@ import loginInterface from './LoginInterface';
 import mainInterface from './MainInterface';
 import articleInterface from './ArticleInterface';
 import tagsInterface from './TagsInterface';
+import worksInterface from './WorksInterface';
 
 export default {
   loginInterface,
   mainInterface,
   articleInterface,
-  tagsInterface
+  tagsInterface,
+  worksInterface
 }
 

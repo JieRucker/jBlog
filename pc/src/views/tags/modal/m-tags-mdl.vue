@@ -1,5 +1,5 @@
 <style lang="scss">
-  @include b(t-tags-mdl) {
+  @include b(m-tags-mdl) {
     @include b(header) {
       color: #333;
       text-align: left;
@@ -15,7 +15,7 @@
 </style>
 
 <template>
-  <Modal v-model="showModal" ref="modal" width="400" class="t-tags-mdl"
+  <Modal v-model="showModal" ref="modal" width="400" class="m-tags-mdl"
          @on-visible-change="onVisible">
     <p slot="header" class="header">
       <span class="header--title">{{modalTitle}}</span>
@@ -39,7 +39,7 @@
 
 <script>
   export default {
-    name: "t-tags-mdl",
+    name: "m-tags-mdl",
     props: {
       autoClose: {
         type: Boolean,
@@ -51,13 +51,13 @@
     },
     computed: {
       modalTitle() {
-        return this.$store.getters.getSource('tTagsMdl', 'first').dataSource.modalTitle
+        return this.$store.getters.getSource('mTagsMdl', 'first').dataSource.modalTitle
       },
       showModal() {
-        return this.$store.getters.getSource('tTagsMdl', 'first').dataSource.showModal
+        return this.$store.getters.getSource('mTagsMdl', 'first').dataSource.showModal
       },
       get() {
-        return this.$store.getters.getSource('tTagsMdl', 'first')
+        return this.$store.getters.getSource('mTagsMdl', 'first')
       }
     },
     data() {
@@ -69,10 +69,10 @@
       }
     },
     created() {
-      let modalType = this.$store.getters.getSource('tTagsMdl', 'first').dataSource.modalType;
+      let modalType = this.$store.getters.getSource('mTagsMdl', 'first').dataSource.modalType;
       if (modalType === 1) {
-        this.tags.name = this.$store.getters.getSource('tTagsMdl', 'first').dataSource.tagsName;
-        this.tags.desc = this.$store.getters.getSource('tTagsMdl', 'first').dataSource.tagsDesc;
+        this.tags.name = this.$store.getters.getSource('mTagsMdl', 'first').dataSource.tagsName;
+        this.tags.desc = this.$store.getters.getSource('mTagsMdl', 'first').dataSource.tagsDesc;
       }
     },
     methods: {
@@ -83,11 +83,11 @@
       onVisible(value) {
         value || this.$store.dispatch('setDestroy', {
           compType: 'first',
-          compName: ['tTagsMdl']
+          compName: ['mTagsMdl']
         });
       },
       async save() {
-        let modalType = this.$store.getters.getSource('tTagsMdl', 'first').dataSource.modalType;
+        let modalType = this.$store.getters.getSource('mTagsMdl', 'first').dataSource.modalType;
         let res;
         switch (modalType) {
           case 0:
@@ -98,7 +98,7 @@
             break;
           case 1:
             res = await this.$api.tagsInterface.alterTags({
-              _id: this.$store.getters.getSource('tTagsMdl', 'first').dataSource._id,
+              _id: this.$store.getters.getSource('mTagsMdl', 'first').dataSource._id,
               tags_name: this.tags.name,
               tags_desc: this.tags.desc
             });

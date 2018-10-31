@@ -68,7 +68,7 @@
                     on: {
                       click: () => {
                         this.$store.dispatch('setDataSourceList', {
-                          compName: 'tTagsMdl',
+                          compName: 'mTagsMdl',
                           compType: 'first',
                           dataSource: {
                             showModal: true,
@@ -117,7 +117,6 @@
     },
     created() {
       this.getTagsList();
-      window.$this = this;
     },
     methods: {
       async getTagsList() {
@@ -151,7 +150,7 @@
       },
       tagsHandler() {
         this.$store.dispatch('setDataSourceList', {
-          compName: 'tTagsMdl',
+          compName: 'mTagsMdl',
           compType: 'first',
           dataSource: {
             showModal: true,
