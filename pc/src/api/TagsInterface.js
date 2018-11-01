@@ -1,6 +1,6 @@
 import BaseModule from "./BaseModule";
 
-class ArticleInterface extends BaseModule {
+class TagsInterface extends BaseModule {
   constructor() {
     super();
     this.baseUrl = process.env.api.commonUrl
@@ -27,4 +27,4 @@ class ArticleInterface extends BaseModule {
   }
 }
 
-export default new ArticleInterface()
+export default new TagsInterface()

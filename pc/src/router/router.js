@@ -122,12 +122,12 @@ export const appRouter = [
     component: Main,
     children: [
       {
-        path: 'pic-list',
+        path: 'upload-list',
         title: '图片列表',
-        name: 'pic-list',
+        name: 'upload-list',
         icon: 'android-funnel',
-        crumb: crumb.pic_list,
-        component: () => import('@/views/upload/pic-list.vue'),
+        crumb: crumb.upload_list,
+        component: () => import('@/views/upload/upload-list.vue'),
       },
     ]
   },

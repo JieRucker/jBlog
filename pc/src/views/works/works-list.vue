@@ -136,8 +136,6 @@
         if (code === 200) {
           this.table.body = data;
         }
-
-        console.log(this.table.body)
       },
       /**
        * 弹窗回调函数callback
