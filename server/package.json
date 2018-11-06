@@ -9,6 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "cos-nodejs-sdk-v5": "^2.4.12",
     "debug": "^3.1.0",
     "gd-bmp": "^1.2.4",
     "jsonwebtoken": "^8.3.0",
@@ -17,12 +18,12 @@
     "koa-convert": "^1.2.0",
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.0",
+    "koa-multer": "^1.0.2",
     "koa-onerror": "^4.0.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "koa-views": "^6.1.4",
     "mongoose": "^5.2.7",
-    "qiniu": "^7.2.1",
     "sha1": "^1.1.1"
   },
   "devDependencies": {

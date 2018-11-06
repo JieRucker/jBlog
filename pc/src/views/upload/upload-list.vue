@@ -10,11 +10,12 @@
       <Upload
         multiple
         :before-upload="uploadHandler"
-        action="//jsonplaceholder.typicode.com/posts/">
+        :show-upload-list="false"
+        :on-progress="onProgress"
+        :on-success="onSuccess"
+        action="api/upload/pic">
         <Button type="primary">上传文件</Button>
-        <!--<Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>-->
       </Upload>
-      <!--<Button type="primary" @click="uploadHandler">上传文件</Button>-->
     </div>
 
     <Table :columns="table.header" :data="table.body"></Table>
@@ -37,18 +38,34 @@
         table: {
           header: [
             {
-              title: '文件名',
+              title: '图片名',
               key: 'file_name'
             },
             {
-              title: '编号',
-              key: 'file_codename'
+              title: '创建时间',
+              key: 'file_time'
             },
             {
               title: '大小',
               key: 'file_size'
             },
             {
+              title: '图片地址',
+              key: 'file_url',
+              render: (h, params) => {
+                return h('img', {
+                  style: {
+                    width: '40px',
+                    height: '40px',
+                    verticalAlign: 'middle'
+                  },
+                  attrs: {
+                    src: params.row.file_url
+                  }
+                })
+              }
+            },
+            /*{
               title: '操作',
               render: (h, params) => {
                 return h('div', [
@@ -89,6 +106,38 @@
                   }, '上传')
                 ]);
               }
+            },*/
+            {
+              title: '操作',
+              render: (h, params) => {
+                return h('div', [
+                  h('Button', {
+                    props: {
+                      type: 'error',
+                      size: 'small'
+                    },
+                    on: {
+                      click: () => {
+                        this.$Modal.confirm({
+                          title: '提示',
+                          content: '<p>确定删除？</p>',
+                          onOk: async () => {
+                            let res = await this.$api.uploadInterface.deleteUploadById({
+                              _id: params.row._id,
+                              file_key: params.row.file_key
+                            });
+                            let {code, msg} = res.data;
+                            if (code === 200) {
+                              this.getUploadList();
+                            }
+                            return this.$Message.info(msg)
+                          }
+                        });
+                      }
+                    }
+                  }, '删除')
+                ]);
+              }
             },
           ],
           body: [],
@@ -99,7 +148,8 @@
           },
         },
         file: null,
-        token: ''
+        token: '',
+        fileList: []
       }
     },
     async created() {
@@ -108,28 +158,34 @@
       if (code === 200) {
         this.token = data.token;
       }
+
+      this.getUploadList();
     },
     methods: {
+      async getUploadList() {
+        let res = await this.$api.uploadInterface.getUploadList();
+        let {code, data} = res.data;
+        if (code === 200) {
+          this.table.body = data;
+        }
+      },
+      onProgress(event, file, fileList) {
+        this.$Spin.show();
+      },
+      onSuccess(response, file, fileList) {
+        this.fileList.pop();
+        if (response.code === 200 && !this.fileList.length) {
+          this.$Spin.hide();
+          this.getUploadList();
+          this.$Message.info(response.msg)
+        }
+      },
       uploadHandler(file) {
-        this.file = file;
-        this.table.body.push({
+        this.fileList.push({
           file_name: file.name,
-          file_codename: this.random_file_name(),
           file_size: file.size,
           file
-        });
-        console.log(this.file);
-        return false;
-      },
-      random_file_name() {
-        /*随机生成文件名，16进制时间戳+8位随机*/
-        let s = new Date().getTime().toString(16);
-        s += '_';
-        let hexDigits = "0123456789abcdef";
-        for (let i = 0; i < 8; i++) {
-          s += hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-        }
-        return s;
+        })
       }
     }
   }

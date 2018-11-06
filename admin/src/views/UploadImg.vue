@@ -101,7 +101,7 @@ export default {
         item.cur_progress = 'width:' + percent + '%;';
       };
 
-      let subObject = { 
+      let subObject = {
         next: next,
         error: error,
         complete: complete
@@ -154,7 +154,7 @@ function random_file_name() {
         resize: none;
         width: 100%;
         border: none;
-        outline: none; 
+        outline: none;
       }
     }
     .upload_size {

@@ -20,6 +20,11 @@ class SettingInterface extends BaseModule {
   alterSetting(data) {
     return this.patch(`${this.baseUrl}/api/setting`, data);
   }
+
+  /*腾讯云上传*/
+  pic(data) {
+    return this.post(`${this.baseUrl}/api/upload/pic`, data);
+  }
 }
 
 export default new SettingInterface()

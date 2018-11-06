@@ -15,8 +15,8 @@ let articleSchema = new Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Tag'
     }],
-    article_create_time: {type: String, default: Date.now},
-    article_update_time: {type: String, default: Date.now},
+    article_create_time: {type: String, default: new Date().formatDate()},
+    article_update_time: {type: String, default: new Date().formatDate()},
     article_state: {
         type: Number,
         defaule: 1 // 0 => draft  1=> published
@@ -39,6 +39,16 @@ let worksSchema = new Schema({
     works_time: String,
     works_website: String,
     works_cover: String,
+});
+
+// 上传文件表
+let uploadSchema = new Schema({
+    file_name: String,
+    file_desc: String,
+    file_time: {type: String, default: new Date().formatDate()},
+    file_size: String,
+    file_url: String,
+    file_key: String
 });
 
 // 管理员表
@@ -84,6 +94,7 @@ let checkcodeSchema = new Schema({
 exports.Article = mongoose.model('Article', articleSchema);
 exports.Tag = mongoose.model('Tag', TagsSchema);
 exports.Work = mongoose.model('Work', worksSchema);
+exports.Upload = mongoose.model('Upload', uploadSchema);
 exports.Admin = mongoose.model('Admin', AdminSchema);
 exports.Setting = mongoose.model('Setting', settingSchema);
 exports.Checkcode = mongoose.model('Checkcode', checkcodeSchema); 

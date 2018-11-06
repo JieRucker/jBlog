@@ -31,7 +31,6 @@ router.get("/", async ctx => {
         ctx.body = {
             code: 200,
             msg: '获取标签列表成功！',
-            data: res,
             data: {
                 tags_list: res,
                 article_num_list

@@ -5,6 +5,7 @@ const work = require('./work');
 const admin = require('./admin');
 const setting = require('./setting');
 const archives = require('./archives');
+const upload = require('./upload');
 
 router.get('/', ctx => {
     ctx.body = 'hello!'
@@ -18,4 +19,5 @@ module.exports = function (app) {
     app.use(admin.routes(), admin.allowedMethods());
     app.use(setting.routes(), setting.allowedMethods());
     app.use(archives.routes(), archives.allowedMethods());
+    app.use(upload.routes(), upload.allowedMethods());
 };

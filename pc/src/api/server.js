@@ -9,6 +9,7 @@ import articleInterface from './ArticleInterface';
 import tagsInterface from './TagsInterface';
 import worksInterface from './WorksInterface';
 import settingInterface from './SettingInterface';
+import uploadInterface from './UploadInterface';
 
 export default {
   loginInterface,
@@ -16,6 +17,7 @@ export default {
   articleInterface,
   tagsInterface,
   worksInterface,
-  settingInterface
+  settingInterface,
+  uploadInterface
 }
 

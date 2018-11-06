@@ -199,7 +199,7 @@ router.patch('/:id', async ctx => {
             article_cover,
             article_desc,
             article_content,
-            article_update_time: new Date().getTime()
+            article_update_time: new Date().formatDate()
         });
         if (res) {
             ctx.body = {

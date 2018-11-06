@@ -67,7 +67,7 @@
               key: 'article_create_time',
               render: (h, params) => {
                 return h('div', [
-                  h('Span', {}, this.formatDate(params.row.article_create_time))
+                  h('Span', {}, params.row.article_create_time)
                 ]);
               }
             },
@@ -76,7 +76,7 @@
               key: 'article_update_time',
               render: (h, params) => {
                 return h('div', [
-                  h('Span', {}, this.formatDate(params.row.article_update_time))
+                  h('Span', {}, params.row.article_update_time)
                 ]);
               }
             },
@@ -230,21 +230,6 @@
       changePage(targetPage) {
         this.table.args.current_page = targetPage;
         this.getArticleList();
-      },
-      formatDate(val) {
-        let time = new Date(Number(val));
-        let y = time.getFullYear();
-        let m = time.getMonth() + 1;
-        let d = time.getDate();
-        let h = time.getHours();
-        let mm = time.getMinutes();
-        let s = time.getSeconds();
-        m = m < 10 ? '0' + m : m;
-        d = d < 10 ? '0' + d : d;
-        h = h < 10 ? '0' + h : h;
-        mm = mm < 10 ? '0' + mm : mm;
-        s = s < 10 ? '0' + s : s;
-        return y + "-" + m + "-" + d + " " + h + ":" + mm + ":" + s;
       },
       formatState(val) {
         return val === 0 ? "草稿" : "发布";

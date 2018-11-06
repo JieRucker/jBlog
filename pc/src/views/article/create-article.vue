@@ -133,12 +133,12 @@
           _id: this.$route.query._id ? this.$route.query._id : '',
           article_content: simplemde.value(),
           article_cover: this.article.cover,
-          article_create_time: this.article.create_time,
+          // article_create_time: this.article.create_time,
           article_desc: this.article.desc,
           article_state: this.article.state,
           article_tags: this.article.tags,
           article_title: this.article.title,
-          article_update_time: this.article.update_time
+          // article_update_time: this.article.update_time
         };
 
         res = !this.$route.query._id ? await this.$api.articleInterface.addArticle(params) : await this.$api.articleInterface.alterArticle(params);
