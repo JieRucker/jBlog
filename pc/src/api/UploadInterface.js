@@ -13,7 +13,7 @@ class UploadInterface extends BaseModule {
 
   /*通过上传id来删除*/
   deleteUploadById(data) {
-    return this.delete(`${this.baseUrl}/api/upload/list/${data._id}/${data.file_key}`,data);
+    return this.delete(`${this.baseUrl}/api/upload/list/${data._id}`);
   }
 }
 

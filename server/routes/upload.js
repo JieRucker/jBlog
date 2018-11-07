@@ -84,15 +84,8 @@ router.post('/pic', upload.single('file'), async (ctx, next) => {
             return new Promise((resolve, reject) => {
                 cos.sliceUploadFile(params, (err, data) => {
                     if (!err) {
-                        cos.getObjectUrl({
-                            Bucket: params.Bucket, // Bucket 格式：test-1250000000
-                            Region: params.Region,
-                            Key: params.Key,
-                            Expires: 60 * 60 * 24 * 365 * 500, /*500年*/
-                            // Sign: true,
-                        }, (err, data) => {
-                            err || resolve({err, data});
-                        });
+                        let url = `https://${params.Bucket}.file.myqcloud.com/${params.Key}`;
+                        resolve({err, url});
                     } else {
                         resolve({err});
                     }
@@ -111,7 +104,7 @@ router.post('/pic', upload.single('file'), async (ctx, next) => {
         } else {
             fs.unlinkSync(localFile);
             let upload = new Upload({
-                file_name, file_desc, file_size, file_key: fileName, file_url: res.data.Url
+                file_name, file_desc, file_size, file_key: fileName, file_url: res.url
             });
             await upload.save();
             ctx.body = {
@@ -152,23 +145,13 @@ router.get('/list', async ctx => {
     }
 });
 
-router.delete('/list/:id/:file_key', async ctx => {
+router.delete('/list/:id', async ctx => {
     let _id = ctx.params.id;
-    let file_key = ctx.params.file_key;
-
-    // console.log(ctx.request.body);
-
-    // console.log(_id);
-
-    Upload.find({_id:_id},(err, doc) => {
-        console.log(doc);
-    })
-
-    // let a = await uploadModel.find_all(query = {_id:_id});
-    // console.log(a);
+    const obj = query => new Promise(resolve => Upload.find(query, (err, doc) => resolve(err ? [] : doc)));
+    let [query] = await obj({_id: _id});
 
     try {
-        /*if (_id.length != 24) {
+        if (_id.length != 24) {
             ctx.body = {
                 code: 401,
                 msg: '删除失败，id有误!'
@@ -194,7 +177,7 @@ router.delete('/list/:id/:file_key', async ctx => {
         let res = await deleteFile({
             Bucket: tengxun_cos.Bucket,
             Region: tengxun_cos.Region,
-            file_key: file_key
+            file_key: query.file_key
         });
 
         if (!res.err) {
@@ -202,11 +185,6 @@ router.delete('/list/:id/:file_key', async ctx => {
                 code: 200,
                 msg: '删除成功！'
             }
-        }*/
-
-        ctx.body = {
-            code: 500,
-            msg: '删除失败！'
         }
     } catch (e) {
         console.log(e);

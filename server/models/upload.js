@@ -10,9 +10,8 @@ const Upload = require("../db").Upload;
 
 module.exports = {
     find_all(json) {
-        let {querys = {}, fields = {}, options = {}} = json;
+        let {querys = {}, fields = {file_key: 0}, options = {}} = json;
         return Upload.find(querys, fields, options, (err, doc) => {
-            console.log(doc);
             return err ? [] : doc;
         })
     },
