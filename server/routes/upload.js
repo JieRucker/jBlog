@@ -6,26 +6,35 @@
  */
 const router = require('koa-router')();
 const fs = require('fs');
-const COS = require('cos-nodejs-sdk-v5');
+// const COS = require('cos-nodejs-sdk-v5');
 const multer = require('koa-multer');
 const uploadModel = require('../models/upload');
 const Upload = require('../db').Upload;
+const UPYUN = require('upyun-classic');
 
 router.prefix('/api/upload');
 
-let cos = new COS({
+/*let cos = new COS({
     AppId: '1257113200',
     SecretId: 'AKID7DMTXS9Zt493oNe6HXMB2pRQK8wdtTbW',
     SecretKey: 'xqnU3RiqKvWzHDJ8sVfhXOBxY0SmxGUW',
 });
 
 let tengxun_cos = {
-    Bucket: 'blog-image-dev-1257113200',
-    Region: 'ap-chengdu',
+    bucket: 'blog-image-dev-1257113200',
+    region: 'ap-chengdu',
+};*/
+
+let upyun_cos = {
+    bucket: 'blog-image-dev',
+    operatorname: 'jrucker',
+    operatorpwd: 'asia162012',
+    endpoint: 'v0'
 };
 
-//文件上传
-//配置
+let upyun = new UPYUN(upyun_cos.bucket, upyun_cos.operatorname, upyun_cos.operatorpwd, upyun_cos.endpoint);
+
+//文件上传配置
 let storage = multer.diskStorage({
     //文件保存路径
     destination: function (req, file, cb) {
@@ -59,52 +68,66 @@ let upload = multer({storage: storage});
 
 /*图片上传*/
 router.post('/pic', upload.single('file'), async (ctx, next) => {
-    let filePath = './' + ctx.req.file.path;
-    let temp = ctx.req.file.originalname.split('.');
-    let fileType = temp[temp.length - 1];
-    let lastName = '.' + fileType;
-    let fileName = Date.now() + lastName;
-
     console.log(ctx.req.file);
-    let file_name = ctx.req.file.originalname;
-    let file_desc = ctx.req.file.path;
-    let file_size = ctx.req.file.size;
+    let local_file = './' + ctx.req.file.path;
+    let temp = ctx.req.file.originalname.split('.');
+    let file_type = temp[temp.length - 1];
+    let last_name = '.' + file_type;
+    let image_name = Date.now() + last_name;
+
+
+    let image_origin_name = ctx.req.file.originalname;
+    let image_path = ctx.req.file.path;
+    let image_size = ctx.req.file.size;
 
     try {
-        // let localFile = './' + fileName;
-        let localFile = filePath;
-        let params = {
+        /*let params = {
             Bucket: tengxun_cos.Bucket,
             Region: tengxun_cos.Region,
-            Key: fileName,
-            FilePath: localFile
+            fileName: fileName,
+            FilePath: local_file
+        };*/
+
+        let params = {
+            bucket: upyun_cos.bucket,
+            image_name: image_name,
+            local_file: local_file
         };
 
-        const uploadFile = params => {
+        const uploadImage = params => {
             return new Promise((resolve, reject) => {
-                cos.sliceUploadFile(params, (err, data) => {
+                upyun.uploadFile(`/image/${params.image_name}`, params.local_file, null, null, null, (err, result) => {
                     if (!err) {
-                        let url = `https://${params.Bucket}.file.myqcloud.com/${params.Key}`;
+                        let url = `http://${params.bucket}.test.upcdn.net/image/${params.image_name}`;
                         resolve({err, url});
                     } else {
                         resolve({err});
                     }
                 })
+
+                /*cos.sliceUploadFile(params, (err, data) => {
+                    if (!err) {
+                        let url = `https://${params.bucket}.file.myqcloud.com/${params.fileName}`;
+                        resolve({err, url});
+                    } else {
+                        resolve({err});
+                    }
+                })*/
             })
         };
 
-        let res = await uploadFile(params);
+        let res = await uploadImage(params);
 
         if (res.err) {
-            fs.unlinkSync(localFile);
+            fs.unlinkSync(local_file);
             ctx.body = {
                 code: 101,
                 msg: '上传失败',
             }
         } else {
-            fs.unlinkSync(localFile);
+            fs.unlinkSync(local_file);
             let upload = new Upload({
-                file_name, file_desc, file_size, file_key: fileName, file_url: res.url
+                image_origin_name, image_path, image_size, image_name, image_url: res.url
             });
             await upload.save();
             ctx.body = {
@@ -161,23 +184,28 @@ router.delete('/list/:id', async ctx => {
         await uploadModel.delete(_id);
 
         const deleteFile = params => {
-            return new Promise((resolve, reject) => {
-                cos.deleteMultipleObject({
-                    Bucket: params.Bucket, // Bucket 格式：test-1250000000
-                    Region: params.Region,
+            return new Promise(resolve => {
+                upyun.removeFile(`/image/${params.image_name}`, (err, result) => resolve({err, result}))
+                /*cos.deleteMultipleObject({
+                    Bucket: params.bucket, // Bucket 格式：test-1250000000
+                    Region: params.region,
                     Objects: [
                         {Key: params.file_key}
                     ]
                 }, (err, data) => {
                     err || resolve({err, data});
-                });
+                });*/
             })
         };
 
-        let res = await deleteFile({
-            Bucket: tengxun_cos.Bucket,
-            Region: tengxun_cos.Region,
+        /*let res = await deleteFile({
+            bucket: tengxun_cos.Bucket,
+            region: tengxun_cos.Region,
             file_key: query.file_key
+        });*/
+
+        let res = await deleteFile({
+            image_name: query.image_name
         });
 
         if (!res.err) {

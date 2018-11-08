@@ -43,12 +43,12 @@ let worksSchema = new Schema({
 
 // 上传文件表
 let uploadSchema = new Schema({
-    file_name: String,
-    file_desc: String,
-    file_time: {type: String, default: new Date().formatDate()},
-    file_size: String,
-    file_url: String,
-    file_key: String
+    image_origin_name: String,
+    image_name: String,
+    create_date: {type: String, default: new Date().formatDate()},
+    image_size: String,
+    image_url: String,
+    image_path: String
 });
 
 // 管理员表

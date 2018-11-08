@@ -39,19 +39,22 @@
           header: [
             {
               title: '图片名',
-              key: 'file_name'
+              key: 'image_origin_name'
             },
             {
               title: '创建时间',
-              key: 'file_time'
+              key: 'create_date'
             },
             {
               title: '大小',
-              key: 'file_size'
+              key: 'image_size',
+              render: (h, params) => {
+                return h('span', {}, `${(params.row.image_size / 1024).toFixed(3)}kb`)
+              }
             },
             {
               title: '图片地址',
-              key: 'file_url',
+              key: 'image_url',
               render: (h, params) => {
                 return h('img', {
                   style: {
@@ -60,57 +63,36 @@
                     verticalAlign: 'middle'
                   },
                   attrs: {
-                    src: params.row.file_url
+                    src: params.row.image_url
                   }
                 })
               }
             },
-            /*{
-              title: '操作',
-              render: (h, params) => {
-                return h('div', [
-                  h('Button', {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
-                    },
-                    on: {
-                      click: () => {
-                        let config = {
-                          useCdnDomain: true
-                        };
-
-                        let putExtra = {
-                          fname: "",
-                          params: {},
-                          mimeType: [] || null
-                        };
-
-                        let observable = qiniu.upload(params.row.file, params.row.file_name, this.token, putExtra, config);
-                        observable.subscribe({
-                          next: (res) => {
-                            let percent = res.total.percent || 0;
-                            console.log(percent)
-                          },
-                          error: (err) => {
-                            console.error(err)
-                          },
-                          complete: (res) => {
-                            console.log(res);
-                            this.$Message.info("上传完成！");
-                            this.table.body.splice(this.table.body.findIndex(item => item.file_codename === params.row.file_codename), 1)
-                          }
-                        }); // 上传开始
-                      }
-                    }
-                  }, '上传')
-                ]);
-              }
-            },*/
             {
               title: '操作',
               render: (h, params) => {
                 return h('div', [
+                  h('Button', {
+                    props: {type: 'primary', size: 'small'},
+                    style: {marginRight: '5px'},
+                    on: {
+                      click: () => {
+                        this.$Modal.confirm({
+                          title: params.row.image_origin_name,
+                          render: (h) => {
+                            return h('div', {
+                              style: {marginTop: '10px', maxHeight: '300px'}
+                            }, [
+                              h('img', {
+                                attrs: {src: params.row.image_url},
+                                style: {width: '100%', height: '100%'}
+                              })
+                            ])
+                          }
+                        })
+                      }
+                    }
+                  }, '预览'),
                   h('Button', {
                     props: {
                       type: 'error',
@@ -124,7 +106,6 @@
                           onOk: async () => {
                             let res = await this.$api.uploadInterface.deleteUploadById({
                               _id: params.row._id,
-                              file_key: params.row.file_key
                             });
                             let {code, msg} = res.data;
                             if (code === 200) {
@@ -149,7 +130,7 @@
         },
         file: null,
         token: '',
-        fileList: []
+        imageList: []
       }
     },
     async created() {
@@ -173,17 +154,17 @@
         this.$Spin.show();
       },
       onSuccess(response, file, fileList) {
-        this.fileList.pop();
-        if (response.code === 200 && !this.fileList.length) {
+        this.imageList.pop();
+        if (response.code === 200 && !this.imageList.length) {
           this.$Spin.hide();
           this.getUploadList();
           this.$Message.info(response.msg)
         }
       },
       uploadHandler(file) {
-        this.fileList.push({
-          file_name: file.name,
-          file_size: file.size,
+        this.imageList.push({
+          image_name: file.name,
+          image_size: file.size,
           file
         })
       }
