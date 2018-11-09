@@ -15,7 +15,7 @@
 </style>
 
 <template>
-  <Modal v-model="showModal" ref="modal" width="400" class="m-works-mdl"
+  <Modal ref="modal" v-model="show" width="400" class="m-works-mdl"
          @on-visible-change="onVisible">
     <p slot="header" class="header">
       <span class="header--title">{{modalTitle}}</span>
@@ -48,30 +48,14 @@
 
 <script>
   export default {
-    name: "m-tags-mdl",
-    props: {
-      autoClose: {
-        type: Boolean,
-        default: true
-      },
-      confirmfunc: {
-        type: Function,
-      }
-    },
-    computed: {
-      modalTitle() {
-        return this.$store.getters.getSource('mWorksMdl', 'first').dataSource.modalTitle
-      },
-      showModal() {
-        return this.$store.getters.getSource('mWorksMdl', 'first').dataSource.showModal
-      },
-      get() {
-        return this.$store.getters.getSource('mWorksMdl', 'first')
-      }
-    },
+    name: "m-works-mdl",
     data() {
       return {
+        show: true,
+        modalType: 0,
+        modalTitle: '新建作品',
         works: {
+          _id: '',
           name: '',
           desc: '',
           time: '',
@@ -80,31 +64,17 @@
         }
       }
     },
-    created() {
-      let modalType = this.$store.getters.getSource('mWorksMdl', 'first').dataSource.modalType;
-      if (modalType === 1) {
-        this.works.name = this.$store.getters.getSource('mWorksMdl', 'first').dataSource.worksName;
-        this.works.desc = this.$store.getters.getSource('mWorksMdl', 'first').dataSource.worksDesc;
-        this.works.time = this.$store.getters.getSource('mWorksMdl', 'first').dataSource.worksTime;
-        this.works.website = this.$store.getters.getSource('mWorksMdl', 'first').dataSource.worksWebsite;
-        this.works.cover = this.$store.getters.getSource('mWorksMdl', 'first').dataSource.worksCover;
-      }
-    },
     methods: {
       /**
        * 关闭弹窗
        * @param value
        */
       onVisible(value) {
-        value || this.$store.dispatch('setDestroy', {
-          compType: 'first',
-          compName: ['mWorksMdl']
-        });
+        value || this.$jDynamic.hide({component: 'mWorksMdl'})
       },
       async save() {
-        let modalType = this.$store.getters.getSource('mWorksMdl', 'first').dataSource.modalType;
         let res;
-        switch (modalType) {
+        switch (this.modalType) {
           case 0:
             res = await this.$api.worksInterface.addWorks({
               works_name: this.works.name,
@@ -116,7 +86,7 @@
             break;
           case 1:
             res = await this.$api.worksInterface.alterWorks({
-              _id: this.$store.getters.getSource('mWorksMdl', 'first').dataSource._id,
+              _id: this.works._id,
               works_name: this.works.name,
               works_desc: this.works.desc,
               works_time: this.works.time,
@@ -129,8 +99,7 @@
         let {code, msg} = res.data;
         if (code === 200) {
           (typeof this.confirmfunc === "function") && (this.confirmfunc.call(null, true));
-
-          this.$refs.modal.cancel()
+          this.onVisible(false);
         }
 
         this.$Message.info(msg)

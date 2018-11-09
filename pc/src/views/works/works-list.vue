@@ -7,7 +7,7 @@
 <template>
   <div>
     <div class="works-toolbar">
-      <Button type="primary" @click="tagsHandler">添加作品</Button>
+      <Button type="primary" @click="worksHandler">添加作品</Button>
     </div>
 
     <Table :columns="table.header" :data="table.body"></Table>
@@ -19,24 +19,14 @@
               show-total @on-change="changePage"></Page>
       </div>
     </div>-->
-
-    <loader :dataSourceList="getDataSourceFirstList" :confirmfunc="confirmfunc"></loader>
   </div>
 </template>
 
 <script>
-  import loader from '@/components/launch/loader.vue';
+  import mWorksMdl from '@/views/works/modal/m-works-mdl.vue';
 
   export default {
     name: "works-list",
-    components: {
-      loader
-    },
-    computed: {
-      getDataSourceFirstList() {
-        return this.$store.getters.getDataSourceList()
-      },
-    },
     data() {
       return {
         table: {
@@ -75,21 +65,27 @@
                     },
                     on: {
                       click: () => {
-                        this.$store.dispatch('setDataSourceList', {
-                          compName: 'mWorksMdl',
-                          compType: 'first',
-                          dataSource: {
-                            showModal: true,
+                        this.$jDynamic.show({
+                          component: 'mWorksMdl',
+                          props: {
                             modalType: 1,
                             modalTitle: '修改作品',
-                            _id: params.row._id,
-                            worksName: params.row.works_name,
-                            worksDesc: params.row.works_desc,
-                            worksTime: params.row.works_time,
-                            worksWebsite: params.row.works_website,
-                            worksCover: params.row.works_cover,
+                            works: {
+                              _id: params.row._id,
+                              name: params.row.works_name,
+                              desc: params.row.works_desc,
+                              time: params.row.works_time,
+                              website: params.row.works_website,
+                              cover: params.row.works_cover,
+                            },
+                            confirmfunc: (value) => {
+                              this.getWorksList()
+                            }
+                          },
+                          render: (h) => {
+                            return h(mWorksMdl)
                           }
-                        });
+                        })
                       }
                     }
                   }, '修改'),
@@ -128,6 +124,7 @@
     },
     created() {
       this.getWorksList();
+      window.$$vm = this;
     },
     methods: {
       async getWorksList() {
@@ -137,26 +134,20 @@
           this.table.body = data;
         }
       },
-      /**
-       * 弹窗回调函数callback
-       * @param value
-       */
-      confirmfunc(value) {
-        console.log(value);
-        if (value) {
-          this.getWorksList()
-        }
-      },
-      tagsHandler() {
-        this.$store.dispatch('setDataSourceList', {
-          compName: 'mWorksMdl',
-          compType: 'first',
-          dataSource: {
-            showModal: true,
+      worksHandler() {
+        this.$jDynamic.show({
+          component: 'mWorksMdl',
+          props: {
             modalType: 0,
             modalTitle: '新建作品',
+            confirmfunc: (value) => {
+              this.getWorksList()
+            }
+          },
+          render: (h) => {
+            return h(mWorksMdl)
           }
-        });
+        })
       }
     }
   }

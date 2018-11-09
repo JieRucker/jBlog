@@ -19,24 +19,14 @@
               show-total @on-change="changePage"></Page>
       </div>
     </div>-->
-
-    <loader :dataSourceList="getDataSourceFirstList" :confirmfunc="confirmfunc"></loader>
   </div>
 </template>
 
 <script>
-  import loader from '@/components/launch/loader.vue';
+  import mTagsMdl from '@/views/tags/modal/m-tags-mdl.vue';
 
   export default {
     name: "tags-list",
-    components: {
-      loader
-    },
-    computed: {
-      getDataSourceFirstList() {
-        return this.$store.getters.getDataSourceList()
-      },
-    },
     data() {
       return {
         table: {
@@ -67,18 +57,24 @@
                     },
                     on: {
                       click: () => {
-                        this.$store.dispatch('setDataSourceList', {
-                          compName: 'mTagsMdl',
-                          compType: 'first',
-                          dataSource: {
-                            showModal: true,
+                        this.$jDynamic.show({
+                          component: 'mTagsMdl',
+                          props: {
                             modalType: 1,
                             modalTitle: '修改标签',
-                            _id: params.row._id,
-                            tagsName: params.row.tags_name,
-                            tagsDesc: params.row.tags_desc,
+                            tags: {
+                              _id: params.row._id,
+                              name: params.row.tags_name,
+                              desc: params.row.tags_desc,
+                            },
+                            confirmfunc: (value) => {
+                              this.getTagsList()
+                            }
+                          },
+                          render: (h) => {
+                            return h(mTagsMdl)
                           }
-                        });
+                        })
                       }
                     }
                   }, '修改'),
@@ -138,26 +134,20 @@
         this.table.args.current_page = targetPage;
         this.getTagsList();
       },*/
-      /**
-       * 弹窗回调函数callback
-       * @param value
-       */
-      confirmfunc(value) {
-        console.log(value);
-        if (value) {
-          this.getTagsList()
-        }
-      },
       tagsHandler() {
-        this.$store.dispatch('setDataSourceList', {
-          compName: 'mTagsMdl',
-          compType: 'first',
-          dataSource: {
-            showModal: true,
+        this.$jDynamic.show({
+          component: 'mTagsMdl',
+          props: {
             modalType: 0,
             modalTitle: '新建标签',
+            confirmfunc: (value) => {
+              this.getTagsList()
+            }
+          },
+          render: (h) => {
+            return h(mTagsMdl)
           }
-        });
+        })
       }
     }
   }
