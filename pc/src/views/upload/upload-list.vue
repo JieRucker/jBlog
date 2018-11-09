@@ -81,7 +81,7 @@
                           title: params.row.image_origin_name,
                           render: (h) => {
                             return h('div', {
-                              style: {marginTop: '10px', maxHeight: '300px'}
+                              style: {marginTop: '10px'}
                             }, [
                               h('img', {
                                 attrs: {src: params.row.image_url},
