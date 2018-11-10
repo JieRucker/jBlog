@@ -2,6 +2,7 @@ import Async from './async.js';
 
 function instance(options) {
   const render = ('render' in options) ? options.render : undefined;
+  if (Async[options.component]) return false;
   Async[options.component] = Async.newInstance({
     render: render,
     ...options
