@@ -53,7 +53,7 @@
               }
             },
             {
-              title: '图片地址',
+              title: '图片',
               key: 'image_url',
               render: (h, params) => {
                 return h('img', {
@@ -67,6 +67,10 @@
                   }
                 })
               }
+            },
+            {
+              title: '地址',
+              key: 'image_url',
             },
             {
               title: '操作',
