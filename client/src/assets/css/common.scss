@@ -1,0 +1,73 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html ,body {
+  position:relative;
+  font-family:  'Optima','PingFang SC','Roboto','Noto SansCJK','Helvetica Neue','Helvetica',
+                "微软雅黑","YaHei-Consolas-Hybrid",sans-serif;
+  color:#4C555C;
+  height: 100% !important;
+}
+
+ul{
+	list-style:none;
+}
+
+.router-link-active{
+	color:#262626;
+
+}
+img{
+  border:none;
+}
+
+button{
+  background-color:rgba(255,255,255,0);
+  border:none;
+}
+
+
+input,textarea{
+     border:none;    
+      &:focus{
+         outline: none;
+     } 
+     &::placeholder{
+        font-size: inherit;
+        background-color: transparent !important;
+     }
+}
+ 
+
+@media screen and (max-width: 450px) {
+  body{
+     font-size: 14px;
+  }
+}
+@media screen and (max-width: 900px) , screen and (min-width: 450px) {
+  body{
+     font-size: 15px;
+  }
+}
+@media screen and (min-width: 900px) {
+  body{
+     font-size: 15px;
+  }
+}
+ .show{
+      visibility: visible;
+      animation: show 500ms ease 0s 1 normal;
+    }
+@keyframes show{
+      0% {
+        transform: scale(0);
+      }
+       80% {
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
