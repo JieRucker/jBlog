@@ -4,8 +4,10 @@
  */
 
 import articleInterface from './ArticleInterface';
+import mainInterface from './MainInterface';
 
 export default {
   articleInterface,
+  mainInterface
 }
 

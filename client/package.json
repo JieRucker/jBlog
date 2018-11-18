@@ -11,6 +11,7 @@
     "build:dev": "cross-env env_config=dev node build/build.js"
   },
   "dependencies": {
+    "aplayer": "^1.10.1",
     "fastclick": "^1.0.6",
     "highlight": "^0.2.4",
     "highlight.js": "^9.12.0",
