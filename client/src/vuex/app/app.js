@@ -11,7 +11,8 @@ const app = {
     activeMenuItem: null, /*活动菜单*/
     routers: [
       ...appRouter
-    ]
+    ],
+    showSearch: false /*搜索*/
   },
   mutations: {
     updateMenulist(state) {
@@ -46,7 +47,16 @@ const app = {
     },
     setActiveMenuItem(state, obj) {
       state.activeMenuItem = obj.data.node.activeMenuItem || obj.name;
-    }
+    },
+    handleSearch(state, isShow) {
+
+      console.log(state, isShow);
+      if (isShow !== undefined) {
+        state.showSearch = isShow;
+        return;
+      }
+      state.showSearch = !state.showSearch;
+    },
   }
 };
 

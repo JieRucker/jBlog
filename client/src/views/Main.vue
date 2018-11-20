@@ -3,14 +3,16 @@
     position: relative;
     margin: 0 auto;
     width: 100%;
-
     .nav {
       left: 0;
       right: 0;
       top: 0;
       position: fixed;
       z-index: 3;
-      background: rgba(40, 42, 44, .6);
+      transition: all .5s ease-in-out;
+      &.active {
+        background: rgba(40, 42, 44, .6);
+      }
       .menu {
         margin: 0 auto;
         width: 1110px;
@@ -155,19 +157,19 @@
 <template>
   <div class="main-container">
     <header id="header" class="header">
-      <nav class="nav">
+      <nav :class="[{'active':headerMask},'nav']">
         <ul id="menu" class="menu">
           <router-link tag="li" :to="{ path: '/home'}" class="item"><a href="javascript:;">首页</a></router-link>
           <router-link tag="li" :to="{ path: '/archives'}" class="item"><a href="javascript:;">归档</a></router-link>
           <router-link tag="li" :to="{ path: '/tags'}" class="item"><a href="javascript:;">标签</a></router-link>
           <router-link tag="li" :to="{ path: '/about'}" class="item"><a href="javascript:;">关于</a></router-link>
           <li class="item search">
-            <Icon type="search" class="icon"></Icon>
+            <Icon type="search" class="icon" @click="handleSearch()"></Icon>
           </li>
         </ul>
       </nav>
 
-      <div class="brand" style="background-image:url(https://jrucker.cn/images/header-banner.jpg)">
+      <div class="brand" style="background-image:url(http://blog-image-dev.test.upcdn.net/image/1541689829315.jpg)">
         <div class="title">
           <span class="animate">J.Rucker</span>
         </div>
@@ -205,18 +207,27 @@
     <canvas id="evanyou"></canvas>
 
     <div id="aplayer-fixed" class="aplayer-fixed"></div>
+
+    <j-search></j-search>
   </div>
 </template>
 <script>
+  import {mapState, mapMutations} from 'vuex';
   import '@/libs/lib-flexible/flexible';
   import evanyou from '@/libs/canvas/evanyou';
   import SmoothScroll from 'smooth-scroll';
-  import 'APlayer/dist/APlayer.min.css';
-  import APlayer from 'APlayer';
+  import '@/assets/public/animate.css';
+  import '@/libs/aplayer/APlayer.min.css';
+  import '@/libs/aplayer/APlayer.min.js';
+  import jSearch from '@/components/j-search/j-search';
 
   export default {
+    components: {
+      jSearch
+    },
     data() {
       return {
+        headerMask: false,
         CONFIG: {
           favicon: {
             hidden: "https://jrucker.cn/images/failure.ico",
@@ -242,11 +253,12 @@
       evanyou.render();
 
       /*判断位置控制 返回顶部的显隐*/
-      window.addEventListener('scroll', this.listenBackTop, false);
+      window.addEventListener('scroll', this.listenScroll, false);
 
       this.getAudio()
     },
     methods: {
+      ...mapMutations(['handleSearch']),
       async getAudio() {
         let res = await this.$api.mainInterface.getAudioList();
         let {status, data} = res;
@@ -270,12 +282,9 @@
         let anchor = document.querySelector('#app');
         scroll.animateScroll(anchor);
       },
-      listenBackTop() {
-        if (this.getScrollTop() > 650) {
-          document.querySelector('.back-to-top').style.top = 0
-        } else {
-          document.querySelector('.back-to-top').style.top = -900 + 'px'
-        }
+      listenScroll() {
+        this.headerMask = this.getScrollTop() > 550;
+        document.querySelector('.back-to-top').style.top = this.getScrollTop() > 610 ? 0 : -900 + 'px';
       },
       getScrollTop() {
         let scrollTop = 0;
