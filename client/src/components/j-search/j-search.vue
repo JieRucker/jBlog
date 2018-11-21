@@ -6,7 +6,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,7 +37,8 @@
 
 <template>
   <div class="search animated fadeIn" v-if="showSearch" @click="closeMask">
-    <input v-focus class="input" placeholder="请输入关键字" v-model="searchKey" @keyup.enter="search({searchKey:searchKey})"
+    <input v-focus class="input" placeholder="请输入关键字" v-model="search_key"
+           @keyup.enter="search({search_key:search_key})"
            @click.stop="handleSearch(true)">
   </div>
 </template>
@@ -47,7 +48,7 @@
   export default {
     data() {
       return {
-        searchKey: ''
+        search_key: ''
       }
     },
     computed: {
@@ -68,14 +69,15 @@
       // ...mapActions(["searchArticles"]),
       ...mapMutations(['handleSearch']),
       search(params) {
+        console.log(params);
         // this.$router.push({ path: '/articles', query: params});
         // this.searchArticles(params)
         this.handleSearch(false);
-        this.searchKey = ''
+        Object.assign(this.$data, this.$options.data())
       },
       closeMask() {
         this.handleSearch(false);
-        this.searchKey = ''
+        Object.assign(this.$data, this.$options.data())
       }
     }
   }

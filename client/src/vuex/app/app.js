@@ -49,9 +49,7 @@ const app = {
       state.activeMenuItem = obj.data.node.activeMenuItem || obj.name;
     },
     handleSearch(state, isShow) {
-
-      console.log(state, isShow);
-      if (isShow !== undefined) {
+      if (typeof isShow !== 'undefined') {
         state.showSearch = isShow;
         return;
       }

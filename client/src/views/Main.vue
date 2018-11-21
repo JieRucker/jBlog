@@ -142,6 +142,23 @@
     text-align: center;
   }
 
+  .back-top {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, .6);
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    transition: all .2s ease-in-out;
+    z-index: 50;
+    .chevron-up {
+      color: #fff;
+      font-size: 20px;
+      padding: 8px 12px;
+    }
+  }
+
   .aplayer-fixed {
     position: fixed;
     bottom: 0;
@@ -152,6 +169,38 @@
     overflow: visible;
     max-width: 400px;
     box-shadow: none;
+  }
+
+  @media (max-width: 991px) {
+    .main-inner .sidebar {
+      display: none !important;
+    }
+
+    .header {
+      .nav {
+        .menu {
+          display: flex;
+          width: 100%;
+          .item {
+            flex: 1;
+            -webkit-box-flex: 1;
+            margin: 0;
+            text-align: center;
+          }
+        }
+      }
+      .brand {
+        height: 260px;
+        .title {
+          .animate {
+            font-size: 7.8vw;
+          }
+        }
+      }
+    }
+    .back-to-top {
+      display: none;
+    }
   }
 </style>
 <template>
@@ -202,6 +251,10 @@
 
     <div class="back-to-top" @click="slideUp">
       <i class="fa fa-arrow-up"></i>
+    </div>
+
+    <div class="back-top" @click="slideUp">
+      <Icon type="chevron-up" class="chevron-up"></Icon>
     </div>
 
     <canvas id="evanyou"></canvas>
@@ -283,8 +336,14 @@
         scroll.animateScroll(anchor);
       },
       listenScroll() {
-        this.headerMask = this.getScrollTop() > 550;
-        document.querySelector('.back-to-top').style.top = this.getScrollTop() > 610 ? 0 : -900 + 'px';
+        let isPc = this.$Global.isPc();
+        if (isPc) {
+          this.headerMask = this.getScrollTop() > 550;
+          document.querySelector('.back-to-top').style.top = this.getScrollTop() > 610 ? 0 : -900 + 'px';
+        } else {
+          this.headerMask = this.getScrollTop() > 100;
+          document.querySelector('.back-top').style.display = this.getScrollTop() > 170 ? 'block' : 'none';
+        }
       },
       getScrollTop() {
         let scrollTop = 0;

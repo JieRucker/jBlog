@@ -4,7 +4,7 @@
     margin-left: auto;
     margin-right: auto;
     width: 1110px;
-    .posts-collapse {
+    .posts-archives {
       float: left;
       width: 772px;
       min-height: 700px;
@@ -14,25 +14,29 @@
       padding: 40px;
       position: relative;
       overflow: hidden;
-      &:after{
+
+      &:after {
         content: " ";
         position: absolute;
         top: 47px;
-        left: 38px;
+        margin-left: -2px;
         width: 4px;
         height: 100%;
         background: #f5f5f5;
       }
+
       .counter {
         font-size: 16px;
-        margin-left: 20px;
         color: #333;
         font-weight: 700;
+        .total {
+          margin-left: 20px;
+        }
         &:before {
           content: " ";
           position: absolute;
           z-index: 1;
-          left: 34px;
+          margin-left: -6px;
           margin-top: 5px;
           width: 12px;
           height: 12px;
@@ -96,7 +100,7 @@
             top: 8px;
             width: 10px;
             height: 10px;
-            margin-left: -4px;
+            margin-left: -5px;
             background: #bbb;
             border-radius: 50%;
             border: 1px solid #fff;
@@ -108,87 +112,30 @@
         }
       }
     }
+  }
 
+  @media (max-width: 991px) {
+    .main-inner {
+      width: 100%;
+      .posts-archives {
+        width: 100%;
+        min-height: auto;
+        padding: 25px;
+        &:after {
+          top: 33px
+        }
+      }
+    }
     .sidebar {
-      float: right;
-      background: #fff;
-      border-radius: 5px;
-      width: 315px;
-      padding: 20px;
-      .author {
-        text-align: center;
-        .img {
-          width: 130px;
-          height: 130px;
-          border-radius: 50%;
-          border: none;
-          margin: 0 auto;
-        }
-        .description {
-          font-size: 14px;
-          margin: 5px 0 8px;
-          font-weight: 700;
-          color: #555;
-          text-align: center;
-        }
-      }
-      .links {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-bottom: 20px;
-        .item {
-          font-size: 16px;
-          display: inline-block;
-          margin: 0 5px;
-          text-align: center;
-          width: 42px;
-          height: 42px;
-          line-height: 42px;
-          border-radius: 42px;
-          color: rgba(0, 0, 0, .5);
-          background-color: rgba(0, 0, 0, .1);
-          transition: all .3s ease-in-out;
-          font-style: normal;
-        }
-      }
-      .state {
-        overflow: hidden;
-        line-height: 1.4;
-        white-space: nowrap;
-        text-align: center;
-        .item {
-          display: inline-block;
-          padding: 0 10px;
-          color: #555;
-          .count {
-            display: block;
-            text-align: center;
-            color: inherit;
-            font-weight: 600;
-            font-size: 16px;
-          }
-        }
-        .posts {
-          .name {
-            color: #00a7e0;
-          }
-        }
-        .categories {
-          border-left: 1px solid #eee;
-          .name {
-            color: #ff3f1a;
-          }
-        }
-      }
+      display: none;
     }
   }
 </style>
 
 <template>
   <div class="main-inner clearfix">
-    <section class="posts-collapse">
-      <span class="counter">目前共计 25 篇日志。</span>
+    <section class="posts-archives">
+      <div class="counter"><span class="total">目前共计 25 篇日志。</span></div>
       <div class="collection-title">
         <h1 class="year">2018</h1>
       </div>
@@ -206,7 +153,6 @@
           </div>
         </header>
       </article>
-
 
       <div class="collection-title">
         <h1 class="year">2019</h1>
@@ -227,40 +173,17 @@
       </article>
 
     </section>
-    <aside id="sidebar" class="sidebar">
-      <div class="author">
-        <img class="img" src="https://jrucker.cn/images/avatar.png" alt="JRucker">
-        <p class="description">我的博客</p>
-      </div>
-      <div class="links">
-        <a class="item">
-          <Icon type="social-github"></Icon>
-        </a>
-        <a class="item">
-          <Icon type="social-twitter"></Icon>
-        </a>
-        <a class="item">
-          <Icon type="social-rss"></Icon>
-        </a>
-      </div>
-
-      <nav class="state">
-        <a href="/" class="item posts">
-          <span class="count">25</span>
-          <span class="name">日志</span>
-        </a>
-        <a href="/" class="item categories">
-          <span class="count">7</span>
-          <span class="name">分类</span>
-        </a>
-      </nav>
-
-    </aside>
+    <j-aside></j-aside>
   </div>
 </template>
 
 <script>
+  import jAside from '@/components/j-aside/j-aside';
+
   export default {
-    name: "index"
+    name: "index",
+    components: {
+      jAside
+    }
   }
 </script>
