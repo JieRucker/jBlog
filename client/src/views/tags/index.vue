@@ -53,7 +53,7 @@
 
 <template>
   <div class="main-inner clearfix">
-    <section class="posts-tags">
+    <section class="posts-tags animated fadeIn">
       <div class="counter">目前共计 11 个标签</div>
       <div class="cloud-tags">
         <a href="/tags/angularjs/" style="font-size: 28.5px; color: #212121">AngularJS</a>

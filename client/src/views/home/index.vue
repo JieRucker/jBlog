@@ -116,7 +116,7 @@
 
 <template>
   <div class="main-inner clearfix">
-    <section class="posts-expand">
+    <section class="posts-expand animated fadeIn">
       <article class="post">
         <div class="date">
           <div class="month">09月</div>

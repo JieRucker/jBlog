@@ -54,7 +54,7 @@
 
 <template>
   <div class="main-inner clearfix">
-    <section class="posts-about">
+    <section class="posts-about animated fadeIn">
       <div class="header">关于</div>
       <div class="body">
         <div class="info">

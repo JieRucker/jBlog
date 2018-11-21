@@ -134,7 +134,7 @@
 
 <template>
   <div class="main-inner clearfix">
-    <section class="posts-archives">
+    <section class="posts-archives animated fadeIn">
       <div class="counter"><span class="total">目前共计 25 篇日志。</span></div>
       <div class="collection-title">
         <h1 class="year">2018</h1>
