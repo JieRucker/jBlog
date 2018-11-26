@@ -3,16 +3,17 @@ import {appRouter} from '@/router/router';
 const app = {
   state: {
     isFullScreen: false,
-    openedSubmenuArr: [], // 要展开的菜单数组
-    menuTheme: 'dark', // 主题
+    openedSubmenuArr: [], /*要展开的菜单数组*/
+    menuTheme: 'dark', /*主题*/
     themeColor: '',
-    currentPath: [], // 面包屑数组
+    currentPath: [], /*面包屑数组*/
     menuList: [],
     activeMenuItem: null, /*活动菜单*/
     routers: [
       ...appRouter
     ],
-    showSearch: false /*搜索*/
+    showSearch: false, /*搜索*/
+    isLoading: false /*加载显示*/
   },
   mutations: {
     updateMenulist(state) {
@@ -54,6 +55,9 @@ const app = {
         return;
       }
       state.showSearch = !state.showSearch;
+    },
+    setLoading(state, isLoading) {
+      state.isLoading = isLoading
     },
   }
 };

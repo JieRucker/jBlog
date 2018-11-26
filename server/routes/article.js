@@ -21,7 +21,8 @@ router.get('/', async ctx => {
         let querys = {};
         // 客服端不给看state属性
         let fields = {
-            article_content: false
+            article_content: false,
+            article_render_content: false
         };
         let mark = await judge_source(ctx);
         if (!mark) {
@@ -85,7 +86,8 @@ router.post('/', async ctx => {
         article_state = 0,
         article_cover = '',
         article_desc = '',
-        article_content = ''
+        article_content = '',
+        article_render_content = ''
     } = ctx.request.body;
     try {
         if (article_title == '' || article_content == '') {
@@ -102,7 +104,8 @@ router.post('/', async ctx => {
             article_state,
             article_cover,
             article_desc,
-            article_content
+            article_content,
+            article_render_content
         });
         let res = await article.save();
         if (res) {
@@ -163,7 +166,9 @@ router.patch('/:id', async ctx => {
         article_state = 0,
         article_cover = '',
         article_desc = '',
-        article_content = ''
+        article_content = '',
+        article_render_content = '',
+        article_navigation = []
     } = ctx.request.body;
     try {
         if (article_title == '' || article_content == '') {
@@ -199,6 +204,8 @@ router.patch('/:id', async ctx => {
             article_cover,
             article_desc,
             article_content,
+            article_render_content,
+            article_navigation,
             article_update_time: new Date().formatDate()
         });
         if (res) {

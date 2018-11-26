@@ -23,7 +23,9 @@ let articleSchema = new Schema({
     },
     article_cover: String,
     article_desc: String,
-    article_content: String
+    article_content: String,
+    article_render_content: String,
+    article_navigation: String
 });
 
 // 标签表
