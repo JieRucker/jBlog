@@ -160,6 +160,7 @@ router.get('/:id', async ctx => {
 // 文章 => 修改文章
 router.patch('/:id', async ctx => {
     let _id = ctx.params.id;
+    let body = ctx.request.body;
     let {
         article_title = '',
         article_tags = [],
@@ -170,6 +171,9 @@ router.patch('/:id', async ctx => {
         article_render_content = '',
         article_navigation = []
     } = ctx.request.body;
+
+    article_navigation = JSON.parse(body.article_navigation);
+
     try {
         if (article_title == '' || article_content == '') {
             ctx.body = {

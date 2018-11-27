@@ -105,7 +105,6 @@
     },*/
     mounted() {
       this.getTagList();
-      window.mavonEditor1 = this.$refs.mavonEditor;
       if (this.$route.query._id) this.getArticleById();
     },
     methods: {
@@ -176,9 +175,6 @@
         let {code, data} = res.data;
         if (code === 200 && data.length) {
           let [a] = data;
-
-          console.log(JSON.parse(a.article_navigation))
-
           this.article.title = a.article_title;
           this.article.state = a.article_state;
           this.article.cover = a.article_cover;

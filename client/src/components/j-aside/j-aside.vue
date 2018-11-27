@@ -5,69 +5,19 @@
     border-radius: 5px;
     width: 315px;
     padding: 20px;
-    .author {
-      text-align: center;
-      .img {
-        width: 130px;
-        height: 130px;
-        border-radius: 50%;
-        border: none;
-        margin: 0 auto;
+  }
+</style>
+
+<style lang="scss">
+  .sidebar {
+    .tabs {
+      .ivu-tabs-bar {
+        margin: 0 40px 16px 40px;
+        border-bottom: 0;
       }
-      .description {
-        font-size: 14px;
-        margin: 5px 0 8px;
-        font-weight: 700;
-        color: #555;
-        text-align: center;
-      }
-    }
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 20px;
-      .item {
-        font-size: 16px;
-        display: inline-block;
-        margin: 0 5px;
-        text-align: center;
-        width: 42px;
-        height: 42px;
-        line-height: 42px;
-        border-radius: 42px;
-        color: rgba(0, 0, 0, .5);
-        background-color: rgba(0, 0, 0, .1);
-        transition: all .3s ease-in-out;
-        font-style: normal;
-      }
-    }
-    .state {
-      overflow: hidden;
-      line-height: 1.4;
-      white-space: nowrap;
-      text-align: center;
-      .item {
-        display: inline-block;
-        padding: 0 10px;
-        color: #555;
-        .count {
-          display: block;
-          text-align: center;
-          color: inherit;
-          font-weight: 600;
-          font-size: 16px;
-        }
-      }
-      .posts {
-        .name {
-          color: #00a7e0;
-        }
-      }
-      .categories {
-        border-left: 1px solid #eee;
-        .name {
-          color: #ff3f1a;
+      .ivu-tabs-nav {
+        :last-child {
+          margin-right: 0;
         }
       }
     }
@@ -76,38 +26,71 @@
 
 <template>
   <aside id="sidebar" class="sidebar">
-    <div class="author">
-      <img class="img" src="https://jrucker.cn/images/avatar.png" alt="JRucker">
-      <p class="description">我的博客</p>
-    </div>
-    <div class="links">
-      <a class="item">
-        <Icon type="social-github"></Icon>
-      </a>
-      <a class="item">
-        <Icon type="social-twitter"></Icon>
-      </a>
-      <a class="item">
-        <Icon type="social-rss"></Icon>
-      </a>
-    </div>
-
-    <nav class="state">
-      <a href="/" class="item posts">
-        <span class="count">25</span>
-        <span class="name">日志</span>
-      </a>
-      <a href="/" class="item categories">
-        <span class="count">7</span>
-        <span class="name">分类</span>
-      </a>
-    </nav>
-
+    <Tabs class="tabs" v-model="current_tab" @on-click="onClick" v-if="showTabs">
+      <TabPane :label="item.value" v-for="(item,index) in tab_list" :key="index">
+        <component :is="current_page"></component>
+      </TabPane>
+    </Tabs>
+    <component :is="current_page" v-if="!showTabs"></component>
   </aside>
 </template>
 
 <script>
+  import postToc from './post-toc';
+  import siteOverview from './site-overview';
+
   export default {
-    name: "j-aside"
+    name: "j-aside",
+    components: {
+      postToc,
+      siteOverview
+    },
+    props: {
+      currentPage: {
+        type: String,
+        default: 'postToc'
+      },
+      currentTab: {
+        type: Number,
+        default: 0
+      },
+      showTabs: {
+        type: Boolean,
+        default: true
+      }
+    },
+    data() {
+      return {
+        current_tab: this.currentTab,
+        current_page: this.currentPage,
+        tab_list: [
+          {
+            value: '文章目录'
+          },
+          {
+            value: '站点概览'
+          }
+        ]
+      }
+    },
+    methods: {
+      onClick(name) {
+        let actions = () => {
+          const functionA = () => {
+            this.current_page = 'postToc'
+          };
+          const functionB = () => {
+            this.current_page = 'siteOverview'
+          };
+          return new Map([
+            [0, functionA],
+            [1, functionB]
+          ])
+        };
+
+        let action = [...actions()].filter(([key]) => key === name);
+        action.map(([key, value]) => value.call(this))
+      }
+    }
   }
 </script>

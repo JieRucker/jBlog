@@ -64,7 +64,6 @@
         }
       }
     },
-
     methods: {
       // ...mapActions(["searchArticles"]),
       ...mapMutations(['handleSearch']),

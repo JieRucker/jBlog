@@ -13,7 +13,9 @@ const app = {
       ...appRouter
     ],
     showSearch: false, /*搜索*/
-    isLoading: false /*加载显示*/
+    isLoading: false, /*加载显示*/
+    showHeader: true, /*显示头部*/
+    showFooter: true /*显示底部*/
   },
   mutations: {
     updateMenulist(state) {
@@ -50,11 +52,13 @@ const app = {
       state.activeMenuItem = obj.data.node.activeMenuItem || obj.name;
     },
     handleSearch(state, isShow) {
-      if (typeof isShow !== 'undefined') {
-        state.showSearch = isShow;
-        return;
-      }
-      state.showSearch = !state.showSearch;
+      state.showSearch = isShow;
+    },
+    setHeaderVisible(state, flag) {
+      state.showHeader = flag;
+    },
+    setFooterVisible(state, flag) {
+      state.showFooter = flag;
     },
     setLoading(state, isLoading) {
       state.isLoading = isLoading
