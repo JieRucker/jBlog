@@ -6,10 +6,6 @@
   }
 </style>
 
-<style lang="scss">
-  @import "../assets/public/markdown.css";
-</style>
-
 <template>
   <div class="main-container">
     <j-header></j-header>

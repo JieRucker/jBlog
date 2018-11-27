@@ -123,39 +123,7 @@
           <div class="day">20</div>
         </div>
         <div class="body">
-          <a class="title" target="_blank" href="/">雨伞|140字微小说</a>
-          <p class="abstract">
-            他出门必带伞，可是每次下雨他到公司还是会淋湿，同事笑他一定是用伞去泡女孩了。 他不解释默默擦干，收起雨伞放回包里。 又来到她墓碑前，他低声说着什...
-          </p>
-          <div class="meta">
-              <span class="time">
-                  <Icon type="ios-calendar-outline" class="calendar"></Icon> 发表 2018-09-20
-              </span>
-            <span class="category">
-                <span class="divider">•</span>
-                <span class="icon">
-                  <Icon type="ios-folder-outline" class="folder"></Icon>
-                </span>
-                <span class="text">分类 代码规范</span>
-              </span>
-            <span class="visitors">
-                <span class="divider">•</span>
-                <span class="icon">
-                  <Icon type="eye" class="eye"></Icon>
-                </span>
-                <span class="text">阅读 13</span>
-              </span>
-          </div>
-        </div>
-      </article>
-
-      <article class="post">
-        <div class="date">
-          <div class="month">09月</div>
-          <div class="day">20</div>
-        </div>
-        <div class="body">
-          <a class="title" target="_blank" href="/">雨伞|140字微小说</a>
+          <a class="title" href="javascript:;" @click="detailRouter">雨伞|140字微小说</a>
           <p class="abstract">
             他出门必带伞，可是每次下雨他到公司还是会淋湿，同事笑他一定是用伞去泡女孩了。 他不解释默默擦干，收起雨伞放回包里。 又来到她墓碑前，他低声说着什...
           </p>
@@ -181,7 +149,7 @@
         </div>
       </article>
     </section>
-    <j-aside></j-aside>
+    <j-aside :show-tabs="false"></j-aside>
   </div>
 </template>
 
@@ -192,6 +160,11 @@
     name: "index",
     components: {
       jAside
+    },
+    methods: {
+      detailRouter() {
+        this.$router.push({path: 'article/detail'})
+      }
     }
   }
 </script>

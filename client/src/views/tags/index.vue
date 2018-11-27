@@ -69,7 +69,7 @@
       </div>
 
     </section>
-    <j-aside></j-aside>
+    <j-aside :show-tabs="false"></j-aside>
   </div>
 </template>
 

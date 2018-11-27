@@ -25,8 +25,8 @@
 </style>
 
 <template>
-  <aside id="sidebar" class="sidebar">
-    <Tabs class="tabs" v-model="current_tab" @on-click="onClick" v-if="showTabs">
+  <aside id="sidebar" class="sidebar animated fadeIn">
+    <Tabs class="tabs" v-model="current_tab" @on-click="onClick" :animated="true" v-if="showTabs">
       <TabPane :label="item.value" v-for="(item,index) in tab_list" :key="index">
         <component :is="current_page"></component>
       </TabPane>
@@ -48,7 +48,7 @@
     props: {
       currentPage: {
         type: String,
-        default: 'postToc'
+        default: 'siteOverview'
       },
       currentTab: {
         type: Number,
