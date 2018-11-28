@@ -30,25 +30,6 @@
   import jLoading from '@/components/j-loading/j-loading';
   import jBackTop from '@/components/j-back-top/j-back-top';
 
-  // import Vue from 'vue';
-  // import hljs from 'highlight.js/lib/highlight';
-  // import 'highlight.js/styles/atom-one-dark.css';
-  // import 'highlight.js/styles/github.css';
-  // import 'highlight.js/styles/googlecode.css';
-
-  /*Vue.directive('highlight', (el) => {
-    let blocks = el.querySelectorAll('pre code');
-    blocks.forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  });*/
-
-  /*marked.setOptions({
-    highlight: function (code, lang, callback) {
-      return hljs.highlightAuto(code).value;
-    }
-  });*/
-
   export default {
     components: {
       jHeader,
