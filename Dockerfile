@@ -6,10 +6,10 @@ RUN apt-get update \
     && apt-get install -y nginx
 
 # 指定工作目录
-WORKDIR /home/git/app
+WORKDIR /app
 
 # 将当前目录下的所有文件拷贝到工作目录下
-COPY . /home/git/app/
+COPY . /app/
 
 # 声明运行时容器提供服务端口
 EXPOSE 80
@@ -20,10 +20,7 @@ EXPOSE 80
 # 4.删除工作目录的文件，尤其时node_modules以减少镜像体积
 # 由于镜像构建的每一步都会产生新层
 # 为了减少镜像体积，尽可能将一些同类操作，集成到一个步骤中，如下
-RUN  cd client
-     npm install \
-     && npm run build \
-     && cp -r dist/* /home/git/html \
+RUN  npm install
 
 
 # 以前台方式启动nginx
