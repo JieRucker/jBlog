@@ -20,10 +20,11 @@ EXPOSE 80
 # 4.删除工作目录的文件，尤其时node_modules以减少镜像体积
 # 由于镜像构建的每一步都会产生新层
 # 为了减少镜像体积，尽可能将一些同类操作，集成到一个步骤中，如下
-RUN  npm install \
+RUN  cd client
+     npm install \
      && npm run build \
-     && cp -r dist/* /home/git \
-     && rm -rf /home/git/app
+     && cp -r dist/* /home/git/html \
+
 
 # 以前台方式启动nginx
 CMD ["nginx","-g","daemon off;"]
