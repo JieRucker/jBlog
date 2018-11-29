@@ -6,10 +6,10 @@ RUN apt-get update \
     && apt-get install -y nginx
 
 # 指定工作目录
-WORKDIR /app
+WORKDIR /home/git/app
 
 # 将当前目录下的所有文件拷贝到工作目录下
-COPY . /app/
+COPY . /home/git/app/
 
 # 声明运行时容器提供服务端口
 EXPOSE 80
@@ -22,8 +22,8 @@ EXPOSE 80
 # 为了减少镜像体积，尽可能将一些同类操作，集成到一个步骤中，如下
 RUN  npm install \
      && npm run build \
-     && cp -r dist/* /var/www/html \
-     && rm -rf /app
+     && cp -r dist/* /home/git \
+     && rm -rf /home/git/app
 
 # 以前台方式启动nginx
 CMD ["nginx","-g","daemon off;"]
