@@ -6,9 +6,16 @@ const admin = require('./admin');
 const setting = require('./setting');
 const archives = require('./archives');
 const upload = require('./upload');
+const fs = require("fs");
+const path = require('path');
 
 router.get('/', ctx => {
     ctx.body = 'hello!'
+});
+
+router.get('/test', async (ctx, next) => {
+    ctx.type = 'html';
+    ctx.body = fs.createReadStream(path.resolve(__dirname, '../../client/index.html'));
 });
 
 module.exports = function (app) {
