@@ -10,6 +10,7 @@
     top: 50%;
     transform: translateY(-60%);
     width: 305px;
+    z-index: 100;
     @include m(form) {
       padding: 10px 0 0;
       .ivu-input-group-append {
