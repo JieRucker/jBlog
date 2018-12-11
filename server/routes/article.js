@@ -22,7 +22,7 @@ router.get('/', async ctx => {
         // 客服端不给看state属性
         let fields = {
             article_content: 0,
-            // article_render_content: 0
+            article_render_content: 0
         };
         let mark = await judge_source(ctx);
         if (!mark) {

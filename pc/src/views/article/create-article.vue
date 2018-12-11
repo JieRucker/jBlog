@@ -111,8 +111,10 @@
       getNavigation() {
         let navigationContent;
         let navigation_list = [];
-        navigationContent = mavonEditor1.$refs.navigationContent;
-        navigationContent.innerHTML = mavonEditor1.d_render;
+        let mavonEditor = this.$refs.mavonEditor;
+        navigationContent = mavonEditor.$refs.navigationContent;
+        navigationContent.innerHTML = mavonEditor.d_render;
+
         let nodes = navigationContent.children;
         if (nodes.length) {
           for (let i = 0; i < nodes.length; i++) {
