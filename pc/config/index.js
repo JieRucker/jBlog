@@ -24,16 +24,6 @@ module.exports = {
         changeOrigin: true
       }
     },
-    /*proxyTable: {
-      '/api': {
-        target: 'http://www.example.com',
-        changeOrigin: true,
-        onProxyReq(proxyReq, req, res) {
-        }
-      }
-    },*/
-
-
     /**
      * Source Maps
      */
