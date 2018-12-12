@@ -128,7 +128,6 @@
         });
 
         this.table.body = tags_list;
-        console.log(this.table.body)
       },
       /*changePage(targetPage) {
         this.table.args.current_page = targetPage;
