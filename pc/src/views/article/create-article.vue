@@ -125,7 +125,10 @@
         function judageH(node, i, nodes) {
           let reg = /^H[1-6]{1}$/;
           if (reg.exec(node.tagName)) {
-            navigation_list.push(node.childNodes[0].getAttribute('id'))
+            navigation_list.push({
+              name: node.innerText,
+              id: node.childNodes[0].getAttribute('id')
+            })
           }
         }
 
