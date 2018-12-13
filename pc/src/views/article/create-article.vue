@@ -160,7 +160,8 @@
         params = {
           _id: this.$route.query._id ? this.$route.query._id : '',
           article_content: this.article.content,
-          article_render_content: this.$refs.mavonEditor.d_render.replace(/[\r\n]/g, ""),
+          // article_render_content: this.$refs.mavonEditor.d_render.replace(/[\r\n]/g, ""),
+          article_render_content: this.$refs.mavonEditor.d_render,
           article_cover: this.article.cover,
           // article_create_time: this.article.create_time,
           article_desc: this.article.desc,
