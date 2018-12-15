@@ -17,18 +17,20 @@ router.prefix('/api/setting');
 // 设置 => 导出数据库中的数据
 router.get('/', async ctx => {
     try {
-        let res = [];
-        let mark = await judge_source(ctx);
-        if (mark) {
-            res = await Setting.find({});
-        } else {
-            res = await Setting.find({}, {'qiniu.SECRET_KEY': false});
-        }
+        let res;
+        res = await Setting.find({}, {'qiniu': false});
 
+        // let mark = await judge_source(ctx);
+        // if (mark) {
+        //     res = await Setting.find({});
+        // } else {
+        // }
+
+        let [data] = res;
         ctx.body = {
             code: 200,
             msg: '获取设置成功!',
-            data: res
+            data: data
         }
 
     } catch (e) {
@@ -40,8 +42,78 @@ router.get('/', async ctx => {
     }
 });
 
-// 设置 => 更新设置
+function setJsonFn(target, prefix, valJson) {
+    for (let item in valJson) {
+        valJson[item] !== '' ? target[prefix + '.' + item] = valJson[item] : '';
+    }
+}
+
+// 设置 => 个人信息
 router.patch('/', async ctx => {
+    let {
+        person_info = null,
+        upyun_cos = null,
+        about = null
+    } = ctx.request.body;
+    let setJson = {};
+
+    try {
+        // 如果数据库中没有数据，创建一个数据
+        let res = await Setting.find({});
+        if (!res.length) await new Setting().save();
+
+        /*更新个人信息*/
+        if (person_info) {
+            let {
+                avatar = '', /*头像*/
+                cover = '', /*封面*/
+                description = '', /*描述*/
+                github = '',
+                twitter = '',
+                juejin = '',
+            } = JSON.parse(person_info);
+            setJsonFn(setJson, 'person_info', {avatar, cover, description, github, twitter, juejin});
+        }
+
+        /*更新upyun信息*/
+        if (upyun_cos) {
+            let {
+                bucket = '',
+                operatorname = '',
+                operatorpwd = '',
+                endpoint = '',
+            } = JSON.parse(upyun_cos);
+            setJsonFn(setJson, 'upyun_cos', {bucket, operatorname, operatorpwd, endpoint});
+        }
+
+        /*更新关于*/
+        if (about) {
+            let {
+                picture = '',
+                description = '',
+            } = JSON.parse(about);
+            setJsonFn(setJson, 'about', {picture, description});
+        }
+
+        res = await Setting.findOneAndUpdate({}, {
+            '$set': setJson
+        }, {new: true});
+
+        ctx.body = {
+            code: 200,
+            msg: '更新设置成功!',
+            data: res
+        }
+
+    } catch (e) {
+        console.log(e);
+        ctx.body = {
+            code: 500,
+            msg: '更新设置失败!'
+        }
+    }
+});
+/*router.patch('/', async ctx => {
     let {
         myInfo = null,
         website_cover = null,
@@ -93,14 +165,16 @@ router.patch('/', async ctx => {
             setJsonFn(setJson, 'other', {ICP, blog_website})
         }
 
-        res = await Setting.findOneAndUpdate({}, {
+        console.log('setJson',setJson)
+
+       /!* res = await Setting.findOneAndUpdate({}, {
             '$set': setJson
-        }, {new: true});
+        }, {new: true});*!/
 
         ctx.body = {
             code: 200,
             msg: '更新设置成功!',
-            data: res
+            data: '11'
         }
 
     } catch (e) {
@@ -117,7 +191,7 @@ router.patch('/', async ctx => {
         }
     }
 
-});
+});*/
 
 // 获取七牛云上传token
 router.get("/token", async ctx => {

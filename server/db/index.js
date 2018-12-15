@@ -68,8 +68,28 @@ let AdminSchema = new Schema({
 });
 
 
-// 全局设置表
+// 设置表
 let settingSchema = new Schema({
+    person_info: {
+        avatar: String, /*头像*/
+        cover: String, /*封面*/
+        description: String, /*描述*/
+        github: String,
+        twitter: String,
+        juejin: String,
+    },
+    about: {
+        picture: String,
+        description: String
+    },
+    upyun_cos: {
+        bucket: String,
+        operatorname: String,
+        operatorpwd: String,
+        endpoint: String,
+    }
+});
+/*let settingSchema = new Schema({
     myInfo: {
         about_me_page: String
     },
@@ -88,7 +108,7 @@ let settingSchema = new Schema({
         ICP: String,
         blog_website: String
     }
-});
+});*/
 
 // 验证码
 let checkcodeSchema = new Schema({

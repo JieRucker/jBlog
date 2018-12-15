@@ -140,12 +140,28 @@ export const appRouter = [
     // hideSubMenu: true,
     children: [
       {
-        path: 'setting',
-        title: '全局设置',
-        name: 'setting',
+        path: 'mine',
+        title: '个人信息',
+        name: 'mine',
         icon: 'android-funnel',
-        crumb: crumb.setting,
-        component: () => import('@/views/setting/setting.vue')
+        crumb: crumb.mine,
+        component: () => import('@/views/setting/mine.vue')
+      },
+      {
+        path: 'upyun',
+        title: '又拍云',
+        name: 'upyun',
+        icon: 'android-funnel',
+        crumb: crumb.upyun,
+        component: () => import('@/views/setting/upyun.vue')
+      },
+      {
+        path: 'about',
+        title: '关于',
+        name: 'about',
+        icon: 'android-funnel',
+        crumb: crumb.about,
+        component: () => import('@/views/setting/about.vue')
       }
     ]
   }
