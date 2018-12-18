@@ -1,7 +1,7 @@
 /*
- * @Author: Pawn 
+ * @Author: jrucker
  * @Date: 2018-08-13 16:14:16 
- * @Last Modified by: Pawn
+ * @Last Modified by: jrucker
  * @Last Modified time: 2018-09-05 22:14:51
  */
 
@@ -16,24 +16,67 @@ router.prefix('/api/tags');
 // 标签 => 查询所有标签,
 router.get("/", async ctx => {
     try {
-        let res = await tagModel.find_all();
-        let arr = [
-            {'$unwind': "$article_tags"},
-            {'$group': {"_id": "$article_tags", "count": {'$sum': 1}}}
-        ];
+        let _id = ctx.query._id;
 
-        let mark = await judge_source(ctx);
-        if (!mark) {
-            arr.unshift({'$match': {"article_state": 1}})
-        }
+        if (!_id) {
+            let res = await tagModel.find_all();
+            let arr = [
+                {'$unwind': "$article_tags"},
+                {'$group': {"_id": "$article_tags", "count": {'$sum': 1}}}
+            ];
 
-        let article_num_list = await Article.aggregate(arr);
-        ctx.body = {
-            code: 200,
-            msg: '获取标签列表成功！',
-            data: {
-                tags_list: res,
-                article_num_list
+            let mark = await judge_source(ctx);
+            if (!mark) {
+                arr.unshift({'$match': {"article_state": 1}})
+            }
+
+            let article_num_list = await Article.aggregate(arr);
+            ctx.body = {
+                code: 200,
+                msg: '获取标签列表成功！',
+                data: {
+                    tags_list: res,
+                    article_num_list
+                }
+            }
+        } else {
+            let yearList = [];
+            let result = [];
+
+            let list = await Article.find({}, (err, doc) => {
+                return err ? [] : doc;
+            });
+
+            for (let i = 0; i < list.length; i++) {
+                console.log('article_create_time', list[i].article_create_time);
+                let article_create_time = new Date(list[i].article_create_time);
+                let getFullYear = article_create_time.getFullYear();
+                yearList.push(getFullYear)
+            }
+
+            yearList = [...new Set(yearList)];
+
+            for (let i = 0; i < yearList.length; i++) {
+                let obj = {
+                    year: yearList[i],
+                    list: []
+                };
+                for (let j = 0; j < list.length; j++) {
+                    let article_create_time = new Date(list[j].article_create_time);
+                    let getFullYear = article_create_time.getFullYear();
+
+                    if (yearList[i] === getFullYear) {
+                        obj.list.push(list[j])
+                    }
+                }
+                result.push(obj)
+            }
+
+            ctx.body = {
+                code: 200,
+                msg: '获取标签详情成功',
+                data: result,
+                total: list.length
             }
         }
     } catch (e) {

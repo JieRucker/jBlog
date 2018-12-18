@@ -15,6 +15,11 @@ module.exports = {
             return err ? [] : doc;
         })
     },
+    find_by_id(_id) {
+        return Upload.find({_id}, (err, doc) => {
+            return err ? [] : doc;
+        })
+    },
     update(_id, json) {
         return Upload.findByIdAndUpdate(_id, json, {new: true}, (err, doc) => {
             return err ? false : true;

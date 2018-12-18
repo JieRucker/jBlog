@@ -102,10 +102,23 @@ export default {
       alert(msg);
       return;
     }
-    this.myInfo = data[0].myInfo;
-    this.website_cover = data[0].website_cover;
-    this.qiniu = data[0].qiniu;
-    this.other = data[0].other;
+    console.log(data)
+
+    if(data[0].myInfo){
+      this.myInfo = data[0].myInfo;
+    }
+
+    if(data[0].website_cover){
+      this.website_cover = data[0].website_cover;
+    }
+
+    if(data[0].qiniu){
+      this.qiniu = data[0].qiniu;
+    }
+
+    if(data[0].other){
+      this.other = data[0].other;
+    }
 
     this.admin_pwd.admin_id = this.$store.state.adminInfo.admin_id;
   },
@@ -133,14 +146,14 @@ export default {
         blog_website: ''
       },
       admin_pwd: {
-        admin_id: '', 
-        ori_pwd: '', 
-        new_pwd: '', 
+        admin_id: '',
+        ori_pwd: '',
+        new_pwd: '',
         re_pwd: ''
       }
     }
   },
-  methods: {  
+  methods: {
     alter_myInfo(){
       this.alter({
         myInfo:this.myInfo
@@ -203,7 +216,7 @@ export default {
       padding: 10px 0;
       align-items:center;
       justify-content: center;
-      word-break: break-all; 
+      word-break: break-all;
       .form-title{
         width: 180px;
         text-align: right;

@@ -142,6 +142,12 @@ router.get('/:id', async ctx => {
             return;
         }
         let querys = {_id};
+        let [article] = await articleModel.find_by_id(_id);
+
+        await articleModel.update(_id, {
+            read_num: ++article.read_num
+        });
+
         let res = await articleModel.find_all({querys});
         ctx.body = {
             code: 200,
@@ -169,7 +175,7 @@ router.patch('/:id', async ctx => {
         article_desc = '',
         article_content = '',
         article_render_content = '',
-        article_navigation = []
+        article_navigation = [],
     } = ctx.request.body;
 
     article_navigation = JSON.parse(body.article_navigation);

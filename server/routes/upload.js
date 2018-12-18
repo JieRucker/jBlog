@@ -170,8 +170,7 @@ router.get('/list', async ctx => {
 
 router.delete('/list/:id', async ctx => {
     let _id = ctx.params.id;
-    const obj = query => new Promise(resolve => Upload.find(query, (err, doc) => resolve(err ? [] : doc)));
-    let [query] = await obj({_id: _id});
+    let [upload] = await uploadModel.find_by_id(_id);
 
     try {
         if (_id.length != 24) {
@@ -205,7 +204,7 @@ router.delete('/list/:id', async ctx => {
         });*/
 
         let res = await deleteFile({
-            image_name: query.image_name
+            image_name: upload.image_name
         });
 
         if (!res.err) {

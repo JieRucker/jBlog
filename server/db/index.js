@@ -28,7 +28,11 @@ let articleSchema = new Schema({
     article_navigation: [{
         name: String,
         id: String
-    }]
+    }],
+    read_num: {
+        type: Number,
+        default: 0
+    }
 });
 
 // 标签表
