@@ -71,7 +71,7 @@ export default {
       let res = await this.$http.api_get_article_list(this.pagination);
       let {code, msg, data=[]} = res.data;
       if(code == 200){
-        this.pagination.total = data.pagination.total;
+        this.pagination.total = data.total;
         this.article_list = data.list;
       }
     },
@@ -83,7 +83,7 @@ export default {
       this.pagination.keyword = val;
       this.pagination.current_page = 1;
       this.get_article();
-    }, 
+    },
     search_tag(val){
       this.pagination.tag = val;
       this.pagination.current_page = 1;

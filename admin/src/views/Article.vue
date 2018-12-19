@@ -42,7 +42,7 @@
         <li class="article_tags">标签</li>
         <li class="article_state">状态</li>
         <li class="article_operation">操作</li>
-      </ul>      
+      </ul>
       <ul class="article_item" v-for="item in article_list" :key="item._id">
         <li class="article_title">{{item.article_title}}</li>
         <li class="article_crate">{{item.article_create_time | formatDate}}</li>
@@ -54,7 +54,7 @@
             <span>{{tag.tags_name}}</span>
           </a>
         </li>
-        <li class="article_state">{{item.article_state | formatState}}</li> 
+        <li class="article_state">{{item.article_state | formatState}}</li>
         <div class="article_operation">
           <button class="btn look"><a :href='"http://blog.lcylove.cn/#/article/"+item._id' target="_blank">查看</a></button>
           <button class="btn alter" @click="alter(item)">修改</button>
@@ -134,7 +134,7 @@ export default {
         return false;
       }
       this.article_list = data.list;
-      this.pagination = data.pagination;
+      this.pagination.total = data.total;
       return true;
     },
     search() {
@@ -196,7 +196,7 @@ export default {
         border-bottom: 1px dotted #ccc;
         transition: border-bottom-color .6s;
         &::-webkit-input-placeholder {
-          color: #23292F; 
+          color: #23292F;
         }
         &:focus {
           border-bottom-color: #23292F;
@@ -211,7 +211,7 @@ export default {
       align-items:center;
       justify-content: center;
       text-align: center;
-      word-break: break-all;  
+      word-break: break-all;
       border-bottom: 1px solid #ccc;
       padding: 10px 0;
       .article_title {

@@ -6,6 +6,9 @@
  */
 const router = require('koa-router')();
 const Setting = require('../db').Setting;
+const settingModel = require('../models/setting');
+const tagModel = require('../models/tag');
+const articleModel = require('../models/article');
 const Checkcode = require('../db').Checkcode;
 const qiniu = require('qiniu');
 const fs = require("fs");
@@ -17,8 +20,9 @@ router.prefix('/api/setting');
 // 设置 => 导出数据库中的数据
 router.get('/', async ctx => {
     try {
-        let res;
-        res = await Setting.find({}, {'qiniu': false});
+        let [res] = await settingModel.find_all({}, {'qiniu': false});
+        let tag_list = await tagModel.find_all();
+        let article_list = await articleModel.find_all({});
 
         // let mark = await judge_source(ctx);
         // if (mark) {
@@ -26,12 +30,16 @@ router.get('/', async ctx => {
         // } else {
         // }
 
-        let [data] = res;
         ctx.body = {
             code: 200,
             msg: '获取设置成功!',
-            data: data
+            data: {
+                info: res,
+                tags_num: tag_list.length,
+                article_num: article_list.length
+            }
         }
+
 
     } catch (e) {
         console.log(e);

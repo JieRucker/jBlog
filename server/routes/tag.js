@@ -17,6 +17,7 @@ router.prefix('/api/tags');
 router.get("/", async ctx => {
     try {
         let _id = ctx.query._id;
+        let {current_page = 1, page_size = 10} = ctx.query;
 
         if (!_id) {
             let res = await tagModel.find_all();
@@ -40,50 +41,36 @@ router.get("/", async ctx => {
                 }
             }
         } else {
-            let yearList = [];
-            let result = [];
+            let article_list = [];
 
-            let list = await Article.find({}, (err, doc) => {
+            let options = {
+                skip: Number((current_page - 1) * page_size),
+                limit: Number(page_size)
+            };
+
+            let [tag] = await tagModel.find_by_id(_id);
+
+            let list = await Article.find({}, null, options, (err, doc) => {
                 return err ? [] : doc;
             });
 
-            for (let i = 0; i < list.length; i++) {
-                console.log('article_create_time', list[i].article_create_time);
-                let article_create_time = new Date(list[i].article_create_time);
-                let getFullYear = article_create_time.getFullYear();
-                yearList.push(getFullYear)
-            }
-
-            yearList = [...new Set(yearList)];
-
-            for (let i = 0; i < yearList.length; i++) {
-                let obj = {
-                    year: yearList[i],
-                    list: []
-                };
-                for (let j = 0; j < list.length; j++) {
-                    let article_create_time = new Date(list[j].article_create_time);
-                    let getFullYear = article_create_time.getFullYear();
-
-                    if (yearList[i] === getFullYear) {
-                        obj.list.push(list[j])
-                    }
-                }
-                result.push(obj)
-            }
+            list.forEach(article => article.article_tags.forEach(tags_id => tags_id == _id && article_list.push(article)));
 
             ctx.body = {
                 code: 200,
                 msg: '获取标签详情成功',
-                data: result,
-                total: list.length
+                data: {
+                    list: article_list || [],
+                    tags_name: tag.tags_name,
+                    total: article_list.length
+                }
             }
         }
     } catch (e) {
         console.log(e);
         ctx.body = {
             code: 500,
-            msg: '获取标签列表失败,服务器繁忙!'
+            msg: '获取标签列表失败!'
         }
     }
 });

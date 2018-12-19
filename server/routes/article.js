@@ -57,22 +57,14 @@ router.get('/', async ctx => {
             msg: '查询成功！',
             data: {
                 list: res || [],
-                pagination: {
-                    total,
-                    current_page,
-                    page_size
-                }
+                total
             }
         }
     } catch (e) {
         console.log(e);
         ctx.body = {
             code: 500,
-            msg: '获取文章失败！',
-            data: {
-                list: [],
-                pagination: {}
-            }
+            msg: '获取文章失败！'
         }
     }
 

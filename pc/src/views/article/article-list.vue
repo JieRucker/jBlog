@@ -215,7 +215,7 @@
         let {code, data = {}} = res.data;
         if (code === 200) {
           this.table.body = data.list;
-          this.table.args.total_count = data.pagination.total;
+          this.table.args.total_count = data.total;
         }
       },
       handleArticle() {
