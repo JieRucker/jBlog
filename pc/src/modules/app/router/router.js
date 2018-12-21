@@ -1,4 +1,4 @@
-import Main from '@/views/Main.vue';
+import Main from '../views/Main.vue';
 import crumb from './crumb';
 
 export const loginRouter = [
@@ -7,14 +7,14 @@ export const loginRouter = [
     icon: 'android-apps',
     name: 'login',
     title: '登录',
-    component: () => import('@/views/login/login.vue')
+    component: () => import('../views/login/login.vue')
   },
   {
     path: '/register',
     icon: 'android-apps',
     name: 'register',
     title: '注册',
-    component: () => import('@/views/login/register.vue')
+    component: () => import('../views/login/register.vue')
   }
 ];
 
@@ -48,7 +48,7 @@ export const otherRouter = {
           name: 'qrcode-detail',
         }
       ],
-      component: () => import('@/views/qrcode/qrcode-detail.vue')
+      component: () => import('../views/qrcode/qrcode-detail.vue')
     },*/
   ]
 };
@@ -68,7 +68,7 @@ export const appRouter = [
         name: 'article-list',
         icon: 'android-funnel',
         crumb: crumb.article_list,
-        component: () => import('@/views/article/article-list.vue'),
+        component: () => import('../views/article/article-list.vue'),
       },
       {
         path: 'create-article',
@@ -76,7 +76,7 @@ export const appRouter = [
         name: 'create-article',
         icon: 'android-funnel',
         crumb: crumb.create_artcle,
-        component: () => import('@/views/article/create-article.vue'),
+        component: () => import('../views/article/create-article.vue'),
       }
     ]
   },
@@ -93,7 +93,7 @@ export const appRouter = [
         name: 'tags-list',
         icon: 'android-funnel',
         crumb: crumb.tags_list,
-        component: () => import('@/views/tags/tags-list.vue'),
+        component: () => import('../views/tags/tags-list.vue'),
       },
     ]
   },
@@ -110,7 +110,7 @@ export const appRouter = [
         name: 'works-list',
         icon: 'android-funnel',
         crumb: crumb.works_list,
-        component: () => import('@/views/works/works-list.vue'),
+        component: () => import('../views/works/works-list.vue'),
       },
     ]
   },
@@ -127,7 +127,7 @@ export const appRouter = [
         name: 'pic-list',
         icon: 'android-funnel',
         crumb: crumb.pic_list,
-        component: () => import('@/views/upload/pic-list.vue'),
+        component: () => import('../views/upload/pic-list.vue'),
       },
     ]
   },
@@ -145,7 +145,7 @@ export const appRouter = [
         name: 'setting',
         icon: 'android-funnel',
         crumb: crumb.setting,
-        component: () => import('@/views/setting/setting.vue')
+        component: () => import('../views/setting/setting.vue')
       }
     ]
   }

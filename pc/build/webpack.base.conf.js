@@ -1,11 +1,10 @@
 'use strict';
-const webpack = require('webpack');
 const os = require('os');
 const path = require('path');
+const webpack = require('webpack');
 const utils = require('./utils');
 const config = require('../config');
 const vueLoaderConfig = require('./vue-loader.conf');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HappyPack = require('happypack');
 const happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
 
@@ -15,9 +14,6 @@ function resolve(dir) {
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
-  entry: {
-    app: './src/main.js'
-  },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
@@ -78,8 +74,7 @@ module.exports = {
       loaders: ['babel-loader'],
       threadPool: happyThreadPool,
       verbose: true
-    }),
-    // new webpack.ProvidePlugin({})
+    })
   ],
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue

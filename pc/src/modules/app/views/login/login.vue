@@ -76,8 +76,7 @@
     computed: {
       loginStyle() {
         return {
-          // backgroundImage: `url(${process.env.api.staticUrl}static/images/login/login_bg.jpg)`,
-          backgroundImage: `url(static/images/login/login-bg.jpg)`,
+          backgroundImage: `url(${process.env.api.static_url}static/images/login/login-bg.jpg)`,
         }
       }
     },
