@@ -10,6 +10,8 @@ const tagModel = require('../models/tag');
 const Tag = require('../db').Tag;
 const Article = require('../db').Article;
 const {judge_source} = require("../utils/token");
+const Mongoose = require('mongoose');
+const ObjectId = Mongoose.Types.ObjectId;
 
 router.prefix('/api/tags');
 
@@ -17,13 +19,19 @@ router.prefix('/api/tags');
 router.get("/", async ctx => {
     try {
         let _id = ctx.query._id;
-        let {current_page = 1, page_size = 10} = ctx.query;
+        let {current_page = 1, page_size = 1} = ctx.query;
 
         if (!_id) {
             let res = await tagModel.find_all();
             let arr = [
                 {'$unwind': "$article_tags"},
-                {'$group': {"_id": "$article_tags", "count": {'$sum': 1}}}
+                {
+                    '$group': {
+                        "_id": "$article_tags",
+                        "count": {'$sum': 1},
+                        "article_title_list": {'$push': "$article_title"}
+                    }
+                }
             ];
 
             let mark = await judge_source(ctx);
@@ -41,28 +49,29 @@ router.get("/", async ctx => {
                 }
             }
         } else {
-            let article_list = [];
-
-            let options = {
-                skip: Number((current_page - 1) * page_size),
-                limit: Number(page_size)
-            };
-
+            let arr = [
+                {'$unwind': "$article_tags"},
+                {'$match': {'article_tags': new ObjectId(_id)}},
+                {'$group': {"_id": "$article_tags", "count": {'$sum': 1}}},
+            ];
             let [tag] = await tagModel.find_by_id(_id);
+            let article_num_list = await Article.aggregate(arr);
 
-            let list = await Article.find({}, null, options, (err, doc) => {
-                return err ? [] : doc;
-            });
-
-            list.forEach(article => article.article_tags.forEach(tags_id => tags_id == _id && article_list.push(article)));
+            let options = [
+                {'$unwind': "$article_tags"},
+                {'$match': {article_tags: new ObjectId(_id)}},
+                {'$skip': Number((current_page - 1) * page_size)},
+                {'$limit': Number(page_size)}
+            ];
+            let list = await Article.aggregate(options);
 
             ctx.body = {
                 code: 200,
                 msg: '获取标签详情成功',
                 data: {
-                    list: article_list || [],
+                    list: list || [],
                     tags_name: tag.tags_name,
-                    total: article_list.length
+                    total: article_num_list.length ? article_num_list[0].count : 0
                 }
             }
         }

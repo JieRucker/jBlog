@@ -6,6 +6,7 @@
  */
 const router = require('koa-router')();
 const articleModel = require('../models/article');
+const Article = require('../db').Article;
 router.prefix('/api/archives');
 
 // 获取归档列表 => 文章和作品
@@ -24,6 +25,7 @@ router.get('/', async ctx => {
         };
 
         let list = await articleModel.find_all({querys, fields, options});
+        let total = await Article.countDocuments(querys);
 
         for (let i = 0; i < list.length; i++) {
             let article_create_time = new Date(list[i].article_create_time);
@@ -54,7 +56,7 @@ router.get('/', async ctx => {
             msg: '获取归档成功',
             data: {
                 list: result || [],
-                total: list.length
+                total: total
             }
         }
     } catch (e) {
