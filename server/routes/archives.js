@@ -1,7 +1,7 @@
-/*
- * @Author: Pawn 
+/**
+ * @Author: jrucker
  * @Date: 2018-09-01 09:20:34 
- * @Last Modified by: Pawn
+ * @Last Modified by: jrucker
  * @Last Modified time: 2018-09-05 19:30:56
  */
 const router = require('koa-router')();
@@ -11,7 +11,7 @@ router.prefix('/api/archives');
 
 // 获取归档列表 => 文章和作品
 router.get('/', async ctx => {
-    let {current_page = 1, page_size = 10} = ctx.query;
+    let {current_page = 1, page_size = 10, keyword = ''} = ctx.query;
 
     try {
         let yearList = [];
@@ -23,6 +23,15 @@ router.get('/', async ctx => {
             skip: Number((current_page - 1) * page_size),
             limit: Number(page_size)
         };
+
+        if (keyword != '') {
+            let keywordReg = new RegExp(keyword);
+            querys.$or = [
+                {'article_title': keywordReg},
+                // {'article_content': keywordReg},
+                // {'article_desc': keywordReg}
+            ]
+        }
 
         let list = await articleModel.find_all({querys, fields, options});
         let total = await Article.countDocuments(querys);

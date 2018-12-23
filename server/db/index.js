@@ -93,26 +93,6 @@ let settingSchema = new Schema({
         endpoint: String,
     }
 });
-/*let settingSchema = new Schema({
-    myInfo: {
-        about_me_page: String
-    },
-    website_cover: {
-        home: String,
-        production: String,
-        archives: String,
-        about: String
-    },
-    qiniu: {
-        ACCESS_KEY: String,
-        SECRET_KEY: String,
-        BUCKET: String,
-    },
-    other: {
-        ICP: String,
-        blog_website: String
-    }
-});*/
 
 // 验证码
 let checkcodeSchema = new Schema({

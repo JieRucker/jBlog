@@ -1,7 +1,7 @@
-/*
- * @Author: Pawn 
+/**
+ * @Author: jrucker
  * @Date: 2018-08-14 11:33:10 
- * @Last Modified by: Pawn
+ * @Last Modified by: jrucker
  * @Last Modified time: 2018-08-19 14:05:44
  */
 const Article = require("../db").Article;
