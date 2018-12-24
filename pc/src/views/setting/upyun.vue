@@ -43,7 +43,9 @@
       async init() {
         let res = await this.$api.settingInterface.getSetting();
         let {code, msg, data = {}} = res.data;
-        if (data.upyun_cos) this.upyun_cos = data.upyun_cos
+        let info = data.info;
+        let upyun_cos = info.upyun_cos;
+        if (upyun_cos) this.upyun_cos = upyun_cos
       },
       async save() {
         let params = {

@@ -19,7 +19,7 @@ const app = {
       let menuList = [];
       appRouter.forEach((item, index) => {
         let len = menuList.push(item);
-        if(!item.children) return;
+        if (!item.children) return;
         let childrenArr = item.children.filter(child => child);
         if (childrenArr === undefined || childrenArr.length === 0) {
           menuList.splice(len - 1, 1);

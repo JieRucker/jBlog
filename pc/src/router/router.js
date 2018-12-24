@@ -68,6 +68,9 @@ export const appRouter = [
         name: 'article-list',
         icon: 'android-funnel',
         crumb: crumb.article_list,
+        meta: {
+          requiresAuth: true
+        },
         component: () => import('@/views/article/article-list.vue'),
       },
       {
@@ -76,6 +79,9 @@ export const appRouter = [
         name: 'create-article',
         icon: 'android-funnel',
         crumb: crumb.create_artcle,
+        meta: {
+          requiresAuth: true
+        },
         component: () => import('@/views/article/create-article.vue'),
       }
     ]
@@ -93,6 +99,9 @@ export const appRouter = [
         name: 'tags-list',
         icon: 'android-funnel',
         crumb: crumb.tags_list,
+        meta: {
+          requiresAuth: true
+        },
         component: () => import('@/views/tags/tags-list.vue'),
       },
     ]
@@ -110,6 +119,9 @@ export const appRouter = [
         name: 'works-list',
         icon: 'android-funnel',
         crumb: crumb.works_list,
+        meta: {
+          requiresAuth: true
+        },
         component: () => import('@/views/works/works-list.vue'),
       },
     ]
@@ -127,6 +139,9 @@ export const appRouter = [
         name: 'upload-list',
         icon: 'android-funnel',
         crumb: crumb.upload_list,
+        meta: {
+          requiresAuth: true
+        },
         component: () => import('@/views/upload/upload-list.vue'),
       },
     ]
@@ -145,6 +160,9 @@ export const appRouter = [
         name: 'mine',
         icon: 'android-funnel',
         crumb: crumb.mine,
+        meta: {
+          requiresAuth: true
+        },
         component: () => import('@/views/setting/mine.vue')
       },
       {
@@ -153,6 +171,9 @@ export const appRouter = [
         name: 'upyun',
         icon: 'android-funnel',
         crumb: crumb.upyun,
+        meta: {
+          requiresAuth: true
+        },
         component: () => import('@/views/setting/upyun.vue')
       },
       {
@@ -161,6 +182,9 @@ export const appRouter = [
         name: 'about',
         icon: 'android-funnel',
         crumb: crumb.about,
+        meta: {
+          requiresAuth: true
+        },
         component: () => import('@/views/setting/about.vue')
       }
     ]

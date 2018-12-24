@@ -2,8 +2,9 @@ import Vue from 'vue';
 import iView from 'iview';
 import Util from '../libs/util';
 import VueRouter from 'vue-router';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import {routers, otherRouter, appRouter} from './router';
+import store from '@/vuex';
 
 Vue.use(VueRouter);
 
@@ -16,11 +17,28 @@ const RouterConfig = {
 export const router = new VueRouter(RouterConfig);
 
 router.beforeEach((to, from, next) => {
-  iView.LoadingBar.start();
-  Util.title(to.meta.title);
+  //获取store里面的token
+  let token = store.state.user.adminInfo.token;
+
+  //判断要去的路由有没有requiresAuth
+  if (to.meta.requiresAuth) {
+    if (token) {
+      iView.LoadingBar.start();
+      // Util.toDefaultPage([...routers], to.name, router, next);
+      next();
+    } else {
+      next({
+        path: '/login',
+      });
+    }
+  } else {
+    next();
+  }
+
+  // Util.title(to.meta.title);
 
   // 没有配置权限的路由, 直接通过
-  Util.toDefaultPage([...routers], to.name, router, next);
+
 
 });
 

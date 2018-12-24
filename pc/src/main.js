@@ -2,8 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import iView from 'iview';
-import {router} from '@/router/index';
-import store from '@/vuex/index';
+import {router} from '@/router';
+import store from '@/vuex';
 import App from './app.vue';
 import '@/locale';
 import 'iview/dist/styles/iview.css';
@@ -11,7 +11,7 @@ import VueI18n from 'vue-i18n';
 import wyboot from '@/libs/wyboot';
 import api from '@/api/server';
 import JsEncrypt from 'jsencrypt';
-import jDynamic from '@/components/j-dynamic/index';
+import jDynamic from '@/components/j-dynamic';
 
 Vue.use(VueI18n);
 Vue.use(iView);

@@ -1,5 +1,38 @@
-<style lang="scss">
-  @import "login.scss";
+<style lang="scss" scoped>
+  @include b(login) {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    @include b(content) {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 305px;
+      z-index: 100;
+      @include b(form) {
+        padding: 10px 0 0;
+        .code {
+          cursor: pointer;
+        }
+      }
+    }
+    @include b(footer) {
+      text-align: right;
+      display: inherit;
+      .register-btn {
+        font-size: 10px;
+        color: #c3c3c3;
+        margin-right: 10px;
+      }
+      .reset-btn {
+        font-size: 10px;
+        color: #c3c3c3;
+      }
+    }
+  }
 
   #indexLizi {
     position: absolute;
@@ -8,17 +41,23 @@
     bottom: 0;
     overflow: hidden;
   }
+
+  .login /deep/ {
+    .ivu-input-group-append {
+      padding: 0;
+    }
+  }
 </style>
 
 <template>
-  <div class="auth-login" @keydown.enter="handleSubmit" :style="loginStyle">
-    <div class="auth-login__content">
+  <div class="login" @keydown.enter="handleSubmit" :style="loginStyle">
+    <div class="content">
       <Card :bordered="false">
         <p slot="title">
           <Icon type="log-in"></Icon>
           登录
         </p>
-        <div class="auth-login__content--form">
+        <div class="form">
           <Form ref="loginForm" :model="form" :rules="rules">
             <FormItem prop="phoneNum">
               <Input v-model="form.phoneNum" placeholder="请输入用户名">
@@ -37,7 +76,7 @@
             <FormItem prop="vericode">
               <Input v-model="form.vericode" placeholder="请输入验证码">
               <span slot="append">
-                 <img id="getCode" @click="getCode" :src="checkCodeImg"
+                 <img class="code" @click="getCode" :src="checkCodeImg"
                       style="width: 50px;height: 28px;vertical-align: middle;" alt="验证码"/>
                                 </span>
               </Input>
@@ -47,9 +86,9 @@
               <Button @click="handleSubmit" type="primary" long>登录</Button>
             </FormItem>
           </Form>
-          <div class="auth-login__content--footer">
-            <a href="javascript:;" class="register-tip" @click="handleRegister">注册</a>
-            <!--<a href="javascript:;" class="reset-tip" @click="handleResetPassword">重置密码</a>-->
+          <div class="footer">
+            <a href="javascript:;" class="register-btn" @click="handleRegister">注册</a>
+            <!--<a href="javascript:;" class="reset-btn" @click="handleResetPassword">重置密码</a>-->
           </div>
         </div>
       </Card>
@@ -89,8 +128,9 @@
     computed: {
       loginStyle() {
         return {
+          backgroundImage: `url(static/images/login/login-bg.jpg)`,
           // backgroundImage: `url(${process.env.api.staticUrl}static/images/login/login_bg.jpg)`,
-          backgroundImage: `url(static/images/login/bg.png)`,
+          // backgroundImage: `url(static/images/login/bg.png)`,
         }
       }
     },
@@ -98,49 +138,50 @@
       this.getCode();
     },
     mounted() {
-      this.liziInit()
+      // this.liziInit()
     },
     methods: {
       /**
        * 获取图片验证码
        */
       async getCode() {
-        await this.$api.loginInterface.getCheckcode()
-          .then(res => {
-            res = res.data;
-            if (res.code === 200) {
-              this.checkCodeToken = res.data.token;
-              this.checkCodeImg = res.data.img;
-            }
-          }).catch(err => console.error(err))
+        let res = await this.$api.loginInterface.getCheckcode();
+        let {code, data} = res.data;
+        if (code === 200) {
+          this.checkCodeToken = data.token;
+          this.checkCodeImg = data.img;
+        }
       },
       handleSubmit() {
-        this.$refs.loginForm.validate(valid => {
+        this.$refs.loginForm.validate(async valid => {
           if (valid) {
-            this.$api.loginInterface.login({
+            let params = {
               admin_id: this.form.phoneNum,
               admin_pwd: this.form.password,
               code: this.form.vericode,
               token: this.checkCodeToken
-            }).then(res => {
-              res = res.data;
-              if (res.code === 200) {
-                this.$Message.info('登录成功！');
-                this.$store.commit("saveAdminInfo", {
-                  admin_id: res.data.admin_id || '',
-                  admin_name: res.data.admin_name || '',
-                  token: res.data.token || ''
-                });
-                let redirectUrl = decodeURIComponent(this.$route.query.redirect || '/article/article-list');
-                //跳转到指定的路由
-                this.$router.push({
-                  path: redirectUrl
-                });
-              } else {
-                this.$Message.info(res.msg);
-              }
-            }).catch(err => console.error(err))
+            };
+            let res = await this.$api.loginInterface.login(params);
 
+            let {code, data, msg} = res.data;
+            if (code === 200) {
+              this.$Message.info('登录成功！');
+
+              this.$store.commit("saveAdminInfo", {
+                admin_id: data.admin_id || '',
+                admin_name: data.admin_name || '',
+                token: data.token || ''
+              });
+              // let redirectUrl = decodeURIComponent(this.$route.query.redirect || '/article/article-list');
+              //跳转到指定的路由
+              this.$router.push({
+                path: '/article/article-list'
+              });
+              return false;
+            }
+
+            this.getCode();
+            this.$Message.info(msg);
           }
         });
       },

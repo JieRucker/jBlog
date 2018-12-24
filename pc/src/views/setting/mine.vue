@@ -52,7 +52,9 @@
       async init() {
         let res = await this.$api.settingInterface.getSetting();
         let {code, msg, data = {}} = res.data;
-        if (data.person_info) this.person_info = data.person_info
+        let info = data.info;
+        let person_info = info.person_info;
+        if (person_info) this.person_info = person_info
       },
       async save() {
         let params = {

@@ -116,16 +116,10 @@
         }
       },
       loginOut() {
-        this.$api.mainInterface.loginOut()
-          .then(res => {
-            res = res.data;
-            if (res.success) {
-              this.$Message.info('登出成功！');
-              window.location.href = `${process.env.api.authUrl}/login/turnToLogin`;
-            } else {
-              this.$Message.info(res.retMsg);
-            }
-          }).catch(err => console.error(err))
+        this.$store.commit("logout");
+        this.$router.push({
+          name: 'login'
+        });
       }
     },
     watch: {
