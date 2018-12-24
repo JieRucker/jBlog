@@ -1,6 +1,6 @@
 /**
  * @Author: jrucker
- * @Date: 2018-08-14 16:16:17 
+ * @Date: 2018-08-14 16:16:17
  * @Last Modified by: jrucker
  * @Last Modified time: 2018-08-31 09:04:51
  */
@@ -9,7 +9,7 @@ const Admin = require('../db').Admin;
 const adminModel = require('../models/admin');
 const sha1 = require('sha1');
 const SHA1_ADD_STR = "pawn_blog_encrypted_string";
-const {create_token, check_token,check_token_code} = require('../utils/token');
+const {create_token, check_token, check_token_code} = require('../utils/token');
 const Checkcode = require('../db').Checkcode;
 // const {check_token} = require('./utils/token');
 const Koa = require('koa');
@@ -31,7 +31,7 @@ router.post('/register', async ctx => {
         }
         // 判断admin_id是否重复
         let res = await adminModel.find_by_admin_id(admin_id);
-        if (res.length != 0) {
+        if (res.length) {
             ctx.body = {
                 code: 409,
                 msg: '登录账号重复了,请换一个吧!'
@@ -90,7 +90,7 @@ router.post('/login', async ctx => {
         }
 
         res = await Checkcode.findOneAndRemove({token, code});
-        if (res == null) {
+        if (!res) {
             ctx.body = {
                 code: 401,
                 msg: '验证码错误，请重新输入！'
@@ -100,7 +100,7 @@ router.post('/login', async ctx => {
 
         // 验证账号密码
         res = await Admin.find({admin_id, admin_pwd: sha1(sha1(admin_pwd + SHA1_ADD_STR))});
-        if (res.length == 0) {
+        if (!res.length) {
             ctx.body = {
                 code: 401,
                 msg: '登录失败，账号或者密码错误！'
@@ -109,8 +109,9 @@ router.post('/login', async ctx => {
         }
 
         let new_token = create_token(admin_id);
-        res[0].token = new_token;
-        res[0].save();
+        let [value] = res;
+        value.token = new_token;
+        value.save();
         ctx.body = {
             code: 200,
             msg: '登录成功！',
@@ -149,7 +150,7 @@ router.patch('/master', async ctx => {
         }
 
         let res = await adminModel.find_by_admin_id(admin_id);
-        if (res.length == 0) {
+        if (!res.length) {
             ctx.body = {
                 code: 401,
                 msg: '修改密码失败,没有此管理员!'

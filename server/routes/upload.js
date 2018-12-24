@@ -11,6 +11,7 @@ const multer = require('koa-multer');
 const uploadModel = require('../models/upload');
 const Upload = require('../db').Upload;
 const UPYUN = require('upyun-classic');
+const {judge_source} = require("../utils/token");
 
 router.prefix('/api/upload');
 
@@ -152,6 +153,8 @@ router.get('/list', async ctx => {
             skip: Number((current_page - 1) * page_size),
             limit: Number(page_size)
         };
+
+        await judge_source(ctx);
 
         let res = await uploadModel.find_all({options});
         ctx.body = {

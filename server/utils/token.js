@@ -1,6 +1,6 @@
 /**
  * @Author: jrucker
- * @Date: 2018-08-14 17:42:19 
+ * @Date: 2018-08-14 17:42:19
  * @Last Modified by: jrucker
  * @Last Modified time: 2018-09-05 19:59:39
  */
@@ -67,7 +67,7 @@ module.exports = {
         try {
             let {admin_id = ''} = await jwt.verify(token, JWT_ADD_STR);
             let res = await Admin.find({admin_id, token});
-            if (res.length == 0) {
+            if (!res.length) {
                 return false;
             }
         } catch (e) {

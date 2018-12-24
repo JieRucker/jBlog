@@ -1,6 +1,6 @@
 /**
  * @Author: jrucker
- * @Date: 2018-08-22 11:46:36 
+ * @Date: 2018-08-22 11:46:36
  * @Last Modified by: jrucker
  * @Last Modified time: 2018-09-06 16:33:43
  */
@@ -24,11 +24,11 @@ router.get('/', async ctx => {
         let tag_list = await tagModel.find_all();
         let article_list = await articleModel.find_all({});
 
-        // let mark = await judge_source(ctx);
-        // if (mark) {
-        //     res = await Setting.find({});
-        // } else {
-        // }
+        await judge_source(ctx);
+        /*let mark = await judge_source(ctx);
+        if (mark) {
+            res = await Setting.find({});
+        } */
 
         ctx.body = {
             code: 200,

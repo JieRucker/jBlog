@@ -9,7 +9,7 @@ const logger = require('koa-logger');
 require('./utils/formatDate');
 
 const routes = require('./routes/index');
-// const {check_token} = require('./utils/token');
+const {check_token} = require('./utils/token');
 
 // error handler
 onerror(app);
@@ -22,7 +22,7 @@ app.use(json());
 app.use(logger());
 app.use(require('koa-static')(__dirname + '/public'));
 
-// app.use(check_token);
+app.use(check_token);
 
 // app.use(views(__dirname + '/views', {
 //   extension: 'pug'

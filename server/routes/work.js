@@ -8,6 +8,7 @@
 const router = require('koa-router')();
 const workModel = require('../models/work');
 const Work = require('../db').Work;
+const {judge_source} = require("../utils/token");
 
 router.prefix('/api/work');
 
@@ -23,6 +24,8 @@ router.get('/', async ctx => {
             skip: Number((current_page - 1) * page_size),
             limit: Number(page_size)
         };
+
+        await judge_source(ctx);
 
         let res = await workModel.find_all({options});
         ctx.body = {
