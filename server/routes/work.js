@@ -1,6 +1,6 @@
 /**
  * @Author: jrucker
- * @Date: 2018-08-14 15:24:21 
+ * @Date: 2018-08-14 15:24:21
  * @Last Modified by: jrucker
  * @Last Modified time: 2018-08-31 09:00:01
  */
@@ -8,7 +8,7 @@
 const router = require('koa-router')();
 const workModel = require('../models/work');
 const Work = require('../db').Work;
-const {judge_source} = require("../utils/token");
+const {judge_source} = require("../libs/token");
 
 router.prefix('/api/work');
 
@@ -25,7 +25,10 @@ router.get('/', async ctx => {
             limit: Number(page_size)
         };
 
-        await judge_source(ctx);
+        let mark = await judge_source(ctx);
+        if (!mark) {
+            return false
+        }
 
         let res = await workModel.find_all({options});
         ctx.body = {
@@ -104,7 +107,7 @@ router.patch('/:id', async ctx => {
         let res = await workModel.find_all({
             querys: {_id}
         });
-        if (res.length == 0) {
+        if (!res.length) {
             ctx.body = {
                 code: 401,
                 msg: '修改作品失败，作品id号不正确！'

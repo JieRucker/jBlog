@@ -15,8 +15,8 @@ let articleSchema = new Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Tag'
     }],
-    article_create_time: {type: String, default: new Date().formatDate()},
-    article_update_time: {type: String, default: new Date().formatDate()},
+    article_create_time: {type: String, default: util.formatDate(new Date())},
+    article_update_time: {type: String, default: util.formatDate(new Date())},
     article_state: {
         type: Number,
         defaule: 1 // 0 => draft  1=> published
@@ -54,7 +54,7 @@ let worksSchema = new Schema({
 let uploadSchema = new Schema({
     image_origin_name: String,
     image_name: String,
-    create_date: {type: String, default: new Date().formatDate()},
+    create_date: {type: String, default: util.formatDate(new Date())},
     image_size: String,
     image_url: String,
     image_path: String

@@ -13,7 +13,7 @@ const Checkcode = require('../db').Checkcode;
 const qiniu = require('qiniu');
 const fs = require("fs");
 const BMP24 = require('gd-bmp').BMP24;
-const {create_token, judge_source} = require('../utils/token');
+const {create_token, judge_source} = require('../libs/token');
 
 router.prefix('/api/setting');
 
@@ -24,11 +24,11 @@ router.get('/', async ctx => {
         let tag_list = await tagModel.find_all();
         let article_list = await articleModel.find_all({});
 
-        await judge_source(ctx);
-        /*let mark = await judge_source(ctx);
-        if (mark) {
-            res = await Setting.find({});
-        } */
+        let mark = await judge_source(ctx);
+        if (!mark) {
+            // res = await Setting.find({});
+            return false
+        }
 
         ctx.body = {
             code: 200,

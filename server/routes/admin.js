@@ -9,9 +9,9 @@ const Admin = require('../db').Admin;
 const adminModel = require('../models/admin');
 const sha1 = require('sha1');
 const SHA1_ADD_STR = "pawn_blog_encrypted_string";
-const {create_token, check_token, check_token_code} = require('../utils/token');
+const {create_token, check_token, check_token_code} = require('../libs/token');
 const Checkcode = require('../db').Checkcode;
-// const {check_token} = require('./utils/token');
+// const {check_token} = require('./libs/token');
 const Koa = require('koa');
 const app = new Koa();
 

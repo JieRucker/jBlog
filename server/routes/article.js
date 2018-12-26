@@ -8,7 +8,7 @@ const router = require('koa-router')();
 const Article = require('../db').Article;
 const articleModel = require('../models/article');
 router.prefix('/api/article');
-const {judge_source} = require("../utils/token");
+const {judge_source} = require("../libs/token");
 
 /**
  * 文章 => 获取文章列表
@@ -27,6 +27,7 @@ router.get('/', async ctx => {
         let mark = await judge_source(ctx);
         if (!mark) {
             querys.article_state = 1;
+            return false
         }
 
         if (keyword != '') {
@@ -208,7 +209,7 @@ router.patch('/:id', async ctx => {
             article_content,
             article_render_content,
             article_navigation,
-            article_update_time: new Date().formatDate()
+            article_update_time: util.formatDate(new Date())
         });
         if (res) {
             ctx.body = {

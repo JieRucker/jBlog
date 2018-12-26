@@ -5,11 +5,11 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
-
-require('./utils/formatDate');
+const util = require('./libs/util');
+global.util = util;
 
 const routes = require('./routes/index');
-const {check_token} = require('./utils/token');
+const {check_token} = require('./libs/token');
 
 // error handler
 onerror(app);

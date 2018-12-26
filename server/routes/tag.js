@@ -9,7 +9,7 @@ const router = require('koa-router')();
 const tagModel = require('../models/tag');
 const Tag = require('../db').Tag;
 const Article = require('../db').Article;
-const {judge_source} = require("../utils/token");
+const {judge_source} = require("../libs/token");
 const Mongoose = require('mongoose');
 const ObjectId = Mongoose.Types.ObjectId;
 
@@ -36,7 +36,8 @@ router.get("/", async ctx => {
 
             let mark = await judge_source(ctx);
             if (!mark) {
-                arr.unshift({'$match': {"article_state": 1}})
+                // arr.unshift({'$match': {"article_state": 1}});
+                return false
             }
 
             let article_num_list = await Article.aggregate(arr);

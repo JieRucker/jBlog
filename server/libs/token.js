@@ -11,8 +11,10 @@ const Admin = require("../db").Admin;
 
 function handle_401_error(opt) {
     let {ctx, msg = '你还没有登录，请先去登录!'} = opt;
-    ctx.response.status = 401;
-    ctx.response.body = msg;
+    ctx.response.status = 401; // 未授权
+    ctx.response.body = {
+        msg
+    };
 }
 
 module.exports = {
@@ -28,7 +30,7 @@ module.exports = {
 
         if ((ctx.method != 'GET' || URL_NO_PASS.includes(url)) && !URL_YES_PASS.includes(url)) {
             let token = ctx.get("Authorization");
-            if (token == '') {
+            if (util.isBlank(token)) {
                 handle_401_error({ctx});
                 return;
             }
@@ -62,7 +64,7 @@ module.exports = {
     async judge_source(ctx) {
         let token = ctx.get("Authorization");
         if (token == '') {
-            return false;
+            return true;
         }
         try {
             let {admin_id = ''} = await jwt.verify(token, JWT_ADD_STR);
