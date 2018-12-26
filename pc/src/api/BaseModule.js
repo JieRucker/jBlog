@@ -34,8 +34,6 @@ class BaseModule {
     this.instance.interceptors.response.use(response => {
         return response;
       }, err => {
-
-
         let {response} = err;
         if (response.status == 401) {
           store.commit("logout");  // token过期,清除
