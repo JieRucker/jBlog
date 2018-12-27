@@ -142,7 +142,7 @@ export const appRouter = [
         meta: {
           requiresAuth: true
         },
-        component: () => import('../views/upload/pic-list.vue'),
+        component: () => import('../views/upload/upload-list.vue'),
       },
     ]
   },
@@ -163,7 +163,7 @@ export const appRouter = [
         meta: {
           requiresAuth: true
         },
-        component: () => import('@/views/setting/mine.vue')
+        component: () => import('../views/setting/mine.vue')
       },
       {
         path: 'upyun',
@@ -174,7 +174,7 @@ export const appRouter = [
         meta: {
           requiresAuth: true
         },
-        component: () => import('@/views/setting/upyun.vue')
+        component: () => import('../views/setting/upyun.vue')
       },
       {
         path: 'about',
@@ -185,7 +185,7 @@ export const appRouter = [
         meta: {
           requiresAuth: true
         },
-        component: () => import('@/views/setting/about.vue')
+        component: () => import('../views/setting/about.vue')
       }
     ]
   }

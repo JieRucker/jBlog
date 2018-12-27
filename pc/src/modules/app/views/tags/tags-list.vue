@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  import mTagsMdl from '@/views/tags/modal/m-tags-mdl.vue';
+  import mTagsMdl from './modal/m-tags-mdl.vue';
 
   export default {
     name: "tags-list",

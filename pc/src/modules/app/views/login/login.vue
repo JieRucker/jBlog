@@ -128,9 +128,8 @@
     computed: {
       loginStyle() {
         return {
-          backgroundImage: `url(static/images/login/login-bg.jpg)`,
-          // backgroundImage: `url(${process.env.api.staticUrl}static/images/login/login_bg.jpg)`,
-          // backgroundImage: `url(static/images/login/bg.png)`,
+          backgroundImage: `url(${process.env.api.static_url}static/images/login/login-bg.jpg)`,
+          // backgroundImage: `url(${process.env.api.static_url}static/images/login/bg.png)`,
         }
       }
     },
@@ -148,8 +147,9 @@
         let res = await this.$api.loginInterface.getCheckcode();
         let {code, data} = res.data;
         if (code === 200) {
-          this.checkCodeToken = data.token;
-          this.checkCodeImg = data.img;
+          let {token, img} = data;
+          this.checkCodeToken = token;
+          this.checkCodeImg = img;
         }
       },
       handleSubmit() {

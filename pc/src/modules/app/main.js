@@ -2,10 +2,10 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import iView from 'iview';
-import {router} from '@/router';
-import store from '@/vuex';
+import {router} from './router';
+import store from './vuex';
 import App from './app.vue';
-import '@/locale';
+// import '@/locale';
 import 'iview/dist/styles/iview.css';
 import VueI18n from 'vue-i18n';
 import wyboot from '@/libs/wyboot';

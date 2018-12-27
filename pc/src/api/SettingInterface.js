@@ -3,7 +3,7 @@ import BaseModule from "./BaseModule";
 class SettingInterface extends BaseModule {
   constructor() {
     super();
-    this.baseUrl = process.env.api.commonUrl
+    this.baseUrl = process.env.api.common_url
   }
 
   /*获取七牛云上传图片token*/

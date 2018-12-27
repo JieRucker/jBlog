@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import store from '@/vuex/index';
 
 let Async = {};
 
@@ -7,7 +6,6 @@ Async.newInstance = properties => {
   const _props = properties || {};
 
   const Instance = new Vue({
-    store,
     data: Object.assign({}, _props, {}),
     render(h) {
       let vnode = null;

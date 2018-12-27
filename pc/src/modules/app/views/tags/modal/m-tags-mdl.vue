@@ -7,10 +7,6 @@
         font-size: 16px;
       }
     }
-
-    @include b(body) {
-
-    }
   }
 </style>
 

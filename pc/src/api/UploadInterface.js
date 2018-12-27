@@ -3,7 +3,7 @@ import BaseModule from "./BaseModule";
 class UploadInterface extends BaseModule {
   constructor() {
     super();
-    this.baseUrl = process.env.api.commonUrl
+    this.baseUrl = process.env.api.common_url
   }
 
   /*获取上传列表*/

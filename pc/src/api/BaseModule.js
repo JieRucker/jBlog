@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'query-string'
-import store from '@/vuex';
-import {router} from '@/router';
+import store from '@/modules/app/vuex';
+import {router} from '@/modules/app/router';
 
 class BaseModule {
   constructor() {

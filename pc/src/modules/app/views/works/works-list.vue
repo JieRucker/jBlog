@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  import mWorksMdl from '@/views/works/modal/m-works-mdl.vue';
+  import mWorksMdl from './modal/m-works-mdl.vue';
 
   export default {
     name: "works-list",
