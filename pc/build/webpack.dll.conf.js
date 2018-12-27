@@ -13,7 +13,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: {
-    vendor: ["fastclick", "iview", "marked", "smooth-scroll", "vue", "vue-router", 'canvas-nest.js']
+    vendor: ["fastclick", "iview", "jsencrypt", "mavon-editor", "vue", "vue-router"]
   },
   output: {
     /* 打包后生成文件的路径 */
