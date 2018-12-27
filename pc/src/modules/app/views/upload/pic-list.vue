@@ -1,12 +1,12 @@
 <style lang="scss" scoped>
-  .works-toolbar {
+  .pic-container {
     margin-bottom: 10px;
   }
 </style>
 
 <template>
   <div>
-    <div class="works-toolbar">
+    <div class="pic-container">
       <Upload
         multiple
         :before-upload="uploadHandler"
@@ -32,7 +32,7 @@
 
 <script>
   export default {
-    name: "upload-list",
+    name: "pic-list",
     data() {
       return {
         table: {

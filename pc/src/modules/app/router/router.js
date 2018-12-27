@@ -142,7 +142,7 @@ export const appRouter = [
         meta: {
           requiresAuth: true
         },
-        component: () => import('../views/upload/upload-list.vue'),
+        component: () => import('../views/upload/pic-list.vue'),
       },
     ]
   },

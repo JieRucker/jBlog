@@ -51,7 +51,7 @@ class Crumb {
     }]
   }
 
-  static get upload_list() {
+  static get pic_list() {
     return [{
       path: '',
       title: '上传',
