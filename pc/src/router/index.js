@@ -34,12 +34,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
-
-  // Util.title(to.meta.title);
-
-  // 没有配置权限的路由, 直接通过
-
-
 });
 
 router.afterEach((to) => {
