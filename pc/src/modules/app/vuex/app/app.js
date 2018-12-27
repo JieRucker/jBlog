@@ -1,4 +1,4 @@
-import {otherRouter, appRouter} from '@/router/router';
+import {otherRouter, appRouter} from '../../router/router';
 
 const app = {
   state: {

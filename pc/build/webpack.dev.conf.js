@@ -10,21 +10,73 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const portfinder = require('portfinder');
-
-const api = require('../src/api/apiUrl');
+const fs = require('fs-extra');
+const api = require('../config/api');
 const env = require('../config/dev.env');
-env.api = JSON.stringify(api.build_dev);
-
 const HOST = process.env.HOST;
 const PORT = process.env.PORT && Number(process.env.PORT);
 
+env.api = JSON.stringify(api.dev);
+
+function resolve(dir) {
+  return path.join(__dirname, '..', dir)
+}
+
+const target = (() => {
+  return () => {
+    let a = process.env.target;
+    return a ? a.split(',') : '';
+  }
+})();
+
+const getAllHtmlPlugins = (() => {
+  return () => {
+    let array = [];
+    let getTarget = target();
+    getTarget.forEach(file => {
+      let cur_path = resolve('./src/modules/' + file);
+      let package_config = fs.readJsonSync(path.join(cur_path, './package.json'));
+      let name = package_config.name;
+      let config = {
+        template: path.join(cur_path, './index.html'),
+        filename: path.join(name, './index.html'),
+        inject: 'body',
+        chunks: ['manifest', 'vendor', name]
+      };
+      array.push(new HtmlWebpackPlugin(config));
+    });
+
+    return array
+  }
+})();
+
+const getEntry = (() => {
+  return () => {
+    let entry = {};
+    let getTarget = target();
+    getTarget.forEach(file => {
+      let cur_path = resolve('./src/modules/' + file);
+      let package_config = fs.readJsonSync(path.join(cur_path, './package.json'));
+      entry[file] = [path.resolve(path.join(cur_path, package_config.main))];
+    });
+
+    return entry;
+  }
+})();
+
 const devWebpackConfig = merge(baseWebpackConfig, {
+  entry: getEntry(),
   module: {
     rules: utils.styleLoaders({sourceMap: config.dev.cssSourceMap, usePostCSS: true, extract: true})
   },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
-
+  output: {
+    publicPath: config.dev.assetsPublicPath,
+    path: config.build.assetsRoot,
+    filename: utils.assetsPath('js/[name].js?v=[hash]'),
+    chunkFilename: utils.assetsPath('js/[id].js?v=[hash]')
+  },
   // these devServer options should be customized in /config/index.js
   devServer: {
     clientLogLevel: 'warning',
@@ -60,12 +112,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
-    // https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      inject: false
-    }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks(module) {
@@ -90,6 +136,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       children: true,
       minChunks: 3
     }),
+    ...getAllHtmlPlugins(),
     // copy custom static assets
     new CopyWebpackPlugin((() => {
         let array = [];
@@ -100,15 +147,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           '../src/libs/uploader/uploader.min.js': 'static/js',
         };
 
-        const getArray = (fn) => {
-          return (...args) => {
-            return fn.apply(this, args)
-          }
-        };
-
-        const isArray = getArray((args) => {
-          return Object.prototype.toString.call(args) === '[object Array]'
-        });
+        const getArray = fn => (...args) => fn.apply(this, args);
+        const isArray = getArray(args => Object.prototype.toString.call(args) === '[object Array]');
 
         Object.keys(copyPath).forEach(key => {
           const fromTo = (() => {
@@ -126,14 +166,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         });
 
         return array;
-      })()
-    )
-    /*new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../src/components/theme-switch/theme'),
-        to: 'static/css'
-      }
-    ])*/
+      })())
   ]
 });
 
