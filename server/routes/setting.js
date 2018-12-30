@@ -4,6 +4,7 @@
  * @Last Modified by: jrucker
  * @Last Modified time: 2018-09-06 16:33:43
  */
+
 const router = require('koa-router')();
 const Setting = require('../db').Setting;
 const settingModel = require('../models/setting');
@@ -39,8 +40,6 @@ router.get('/', async ctx => {
                 article_num: article_list.length
             }
         }
-
-
     } catch (e) {
         console.log(e);
         ctx.body = {

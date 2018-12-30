@@ -15,6 +15,10 @@ const Checkcode = require('../db').Checkcode;
 const Koa = require('koa');
 const app = new Koa();
 
+const NodeRSA = require('node-rsa');
+const myDecrypter = new NodeRSA({b: 1024});
+myDecrypter.setOptions({encryptionScheme: 'pkcs1'});
+
 router.prefix('/api/admin');
 
 // 用户注册
@@ -38,6 +42,7 @@ router.post('/register', async ctx => {
             };
             return;
         }
+
         let admin = new Admin({
             admin_name,
             admin_id,
@@ -64,12 +69,42 @@ router.post('/register', async ctx => {
     }
 });
 
+// 发送公钥
+router.get('/key', async ctx => {
+    try {
+        let public_key = myDecrypter.exportKey('pkcs8-public');//公钥,
+        let private_key = myDecrypter.exportKey('pkcs8-private'); //私钥
+        let format_public_key = public_key.replace('-----BEGIN PUBLIC KEY-----', '').replace('-----END PUBLIC KEY-----', '').replace(/[\n]/g, "");
+
+        ctx.session.user = {
+            private_key: private_key
+        };
+
+        ctx.body = {
+            code: 200,
+            data: format_public_key
+        }
+    } catch (e) {
+        console.log(e);
+        ctx.body = {
+            code: 500,
+            msg: '请求失败!'
+        }
+    }
+});
+
 // 用户登录
 router.post('/login', async ctx => {
     app.use(check_token);
     let {admin_id = '', admin_pwd = '', token = '', code = ''} = ctx.request.body;
 
     try {
+        let private_key = ctx.session.user.private_key;
+        myDecrypter.importKey(private_key);
+
+        let pwd = admin_pwd.replace(/\s+/g, '+');
+        let decrypted_pwd = myDecrypter.decrypt(pwd, 'utf8'); //解密
+
         if (admin_id == '' || admin_pwd == '' || token == '' || code == '') {
             ctx.body = {
                 code: 401,
@@ -99,7 +134,7 @@ router.post('/login', async ctx => {
         }
 
         // 验证账号密码
-        res = await Admin.find({admin_id, admin_pwd: sha1(sha1(admin_pwd + SHA1_ADD_STR))});
+        res = await Admin.find({admin_id, admin_pwd: sha1(sha1(decrypted_pwd + SHA1_ADD_STR))});
         if (!res.length) {
             ctx.body = {
                 code: 401,

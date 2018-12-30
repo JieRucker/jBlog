@@ -77,7 +77,7 @@
               <Input v-model="form.vericode" placeholder="请输入验证码">
               <span slot="append">
                  <img class="code" @click="getCode" :src="checkCodeImg"
-                      style="width: 50px;height: 28px;vertical-align: middle;" alt="验证码"/>
+                      style="width: 60px;height: 31px;vertical-align: middle;" alt="验证码"/>
                                 </span>
               </Input>
             </FormItem>
@@ -100,6 +100,7 @@
 </template>
 
 <script>
+  import JSEncrypt from 'jsencrypt';
   import THREE from "@/libs/three/three";
 
   export default {
@@ -155,35 +156,50 @@
       handleSubmit() {
         this.$refs.loginForm.validate(async valid => {
           if (valid) {
-            let params = {
-              admin_id: this.form.phoneNum,
-              admin_pwd: this.form.password,
-              code: this.form.vericode,
-              token: this.checkCodeToken
-            };
-            let res = await this.$api.loginInterface.login(params);
+            let res = await this.$api.loginInterface.getPublicKey();
+            let {code, data} = res.data;
 
-            let {code, data, msg} = res.data;
             if (code === 200) {
-              this.$Message.info('登录成功！');
 
-              this.$store.commit("saveAdminInfo", {
-                admin_id: data.admin_id || '',
-                admin_name: data.admin_name || '',
-                token: data.token || ''
-              });
-              // let redirectUrl = decodeURIComponent(this.$route.query.redirect || '/article/article-list');
-              //跳转到指定的路由
-              this.$router.push({
-                path: '/article/article-list'
-              });
-              return false;
+              let publicKey = data;
+              let encrypt = new JSEncrypt.JSEncrypt();
+              encrypt.setPublicKey(publicKey);
+
+              let params = {
+                admin_id: this.form.phoneNum,
+                admin_pwd: encrypt.encrypt(this.form.password),
+                code: this.form.vericode,
+                token: this.checkCodeToken
+              };
+
+              this.loginInterface(params);
             }
-
-            this.getCode();
-            this.$Message.info(msg);
           }
         });
+      },
+      async loginInterface(params) {
+        let res = await this.$api.loginInterface.login(params);
+
+        let {code, data, msg} = res.data;
+        if (code === 200) {
+          this.$Message.info('登录成功！');
+
+          this.$store.commit("saveAdminInfo", {
+            admin_id: data.admin_id || '',
+            admin_name: data.admin_name || '',
+            token: data.token || ''
+          });
+          // let redirectUrl = decodeURIComponent(this.$route.query.redirect || '/article/article-list');
+          //跳转到指定的路由
+          this.$router.push({
+            path: '/article/article-list'
+          });
+          return false;
+        }
+
+        this.getCode();
+        this.$Message.info(msg);
+
       },
       handleRegister() {
         this.$router.push({

@@ -30,6 +30,11 @@ class LoginInterface extends BaseModule {
   isRegisted(data = {}) {
     return this.post(`${this.baseUrl}/login/isRegisted`, data)
   }
+
+  // 获取公钥
+  getPublicKey() {
+    return this.get(`${this.baseUrl}/api/admin/key`)
+  }
 }
 
 export default new LoginInterface()
