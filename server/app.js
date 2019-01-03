@@ -32,6 +32,8 @@ onerror(app);
 
 // middlewares
 app.use(bodyparser({
+    jsonLimit: '10mb', // 控制body的parse转换大小 default 1mb
+    formLimit: '10mb',// 控制post的大小  default 56kb
     enableTypes: ['json', 'form', 'text']
 }));
 app.use(json());
