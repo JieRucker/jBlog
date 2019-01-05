@@ -49,9 +49,6 @@ app.use(check_token);
 // logger
 app.use(async (ctx, next) => {
     const start = new Date();
-
-    // console.log(ctx.session);
-
     Object.assign(ctx.state, {
         user: ctx.session.user
     });
@@ -60,15 +57,6 @@ app.use(async (ctx, next) => {
     const ms = new Date() - start;
     console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 });
-
-
-//添加模板所需的三个变量
-/*app.use(async (ctx, next) => {
-
-
-    await next();
-});*/
-
 
 // routes
 // console.log(index.routes())

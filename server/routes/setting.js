@@ -125,7 +125,7 @@ router.patch('/', async ctx => {
 router.get("/token", async ctx => {
     try {
         let res = await Setting.find({});
-        if (res.length == 0) {
+        if (!res.length) {
             ctx.body = {
                 code: 403,
                 msg: '获取token失败，没有找到七牛云秘钥！',
