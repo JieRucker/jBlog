@@ -8,6 +8,9 @@ const user = {
       admin_id: window.sessionStorage.getItem('admin_id') || ''
     }
   },
+  getters: {
+    getAdminInfo: state => state.adminInfo
+  },
   mutations: {
     saveAdminInfo: (state, data) => {
       state.adminInfo.token = data.token;

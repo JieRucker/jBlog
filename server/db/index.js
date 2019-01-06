@@ -57,7 +57,15 @@ let uploadSchema = new Schema({
     create_date: {type: String, default: util.formatDate(new Date())},
     image_size: String,
     image_url: String,
-    image_path: String
+    image_path: String,
+    fold_id: String
+});
+
+// 文件目录表
+let FoldSchema = new Schema({
+    // id: mongoose.Schema.ObjectId,
+    name: String,
+    parentId: String
 });
 
 // 管理员表
@@ -70,7 +78,6 @@ let AdminSchema = new Schema({
         default: ''
     },
 });
-
 
 // 设置表
 let settingSchema = new Schema({
@@ -104,6 +111,7 @@ exports.Article = mongoose.model('Article', articleSchema);
 exports.Tag = mongoose.model('Tag', TagsSchema);
 exports.Work = mongoose.model('Work', worksSchema);
 exports.Upload = mongoose.model('Upload', uploadSchema);
+exports.Fold = mongoose.model('Fold', FoldSchema);
 exports.Admin = mongoose.model('Admin', AdminSchema);
 exports.Setting = mongoose.model('Setting', settingSchema);
 exports.Checkcode = mongoose.model('Checkcode', checkcodeSchema); 

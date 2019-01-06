@@ -1,3 +1,11 @@
+/**
+ * @Author: jrucker
+ * @Description
+ * @Date: 2018/10/15 9:56
+ * @Last Modified by: jrucker
+ * @Last Modified time: 2018/10/15 9:56
+ */
+
 import Async from './async.js';
 
 function instance(options) {

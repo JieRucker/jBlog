@@ -12,6 +12,8 @@ const uploadModel = require('../models/upload');
 const Upload = require('../db').Upload;
 const UPYUN = require('upyun-classic');
 const {judge_source} = require("../libs/token");
+const Mongoose = require('mongoose');
+const ObjectId = Mongoose.Types.ObjectId;
 
 router.prefix('/api/upload');
 
@@ -68,14 +70,16 @@ createFolder(uploadFolder);
 let upload = multer({storage: storage});
 
 /*图片上传*/
-router.post('/pic', upload.single('file'), async (ctx, next) => {
-    console.log(ctx.req.file);
+router.post('/pic/:id', upload.single('file'), async (ctx, next) => {
+    // console.log(ctx.req.file);
+
+    let fold_id = ctx.params.id;
+
     let local_file = './' + ctx.req.file.path;
     let temp = ctx.req.file.originalname.split('.');
     let file_type = temp[temp.length - 1];
     let last_name = '.' + file_type;
     let image_name = Date.now() + last_name;
-
 
     let image_origin_name = ctx.req.file.originalname;
     let image_path = ctx.req.file.path;
@@ -128,7 +132,7 @@ router.post('/pic', upload.single('file'), async (ctx, next) => {
         } else {
             fs.unlinkSync(local_file);
             let upload = new Upload({
-                image_origin_name, image_path, image_size, image_name, image_url: res.url
+                image_origin_name, image_path, image_size, image_name, image_url: res.url, fold_id
             });
             await upload.save();
             ctx.body = {
@@ -146,24 +150,37 @@ router.post('/pic', upload.single('file'), async (ctx, next) => {
 
 /*查询上传列表*/
 router.get('/list', async ctx => {
-    let {current_page = 1, page_size = 10} = ctx.query;
-    try {
-        let options = {
-            sort: {'file_time': '-1'},
-            skip: Number((current_page - 1) * page_size),
-            limit: Number(page_size)
-        };
+    let {id, current_page = 1, page_size = 10} = ctx.query;
 
+    try {
         let mark = await judge_source(ctx);
         if (!mark) {
             return false
         }
 
-        let res = await uploadModel.find_all({options});
+        let querys = {
+            fold_id: new ObjectId(id)
+        };
+
+        let fields = {
+            fold_id: 0
+        };
+
+        let options = {
+            sort: {'create_date': '-1'},
+            skip: Number((current_page - 1) * page_size),
+            limit: Number(page_size)
+        };
+        let res = await uploadModel.find_all({querys, fields, options});
+        let total = await Upload.countDocuments(querys);
+
         ctx.body = {
             code: 200,
             msg: '查询成功！',
-            data: res
+            data: {
+                list: res || [],
+                total
+            }
         }
     } catch (e) {
         console.log(e);
@@ -174,6 +191,39 @@ router.get('/list', async ctx => {
     }
 });
 
+/*修改文件目录*/
+router.patch('/:id', async ctx => {
+    let {
+        _id,
+        fold_id = ''
+    } = ctx.request.body;
+
+    try {
+        let res = await uploadModel.update(_id, {
+            fold_id
+        });
+        if (res) {
+            ctx.body = {
+                code: 200,
+                msg: '修改成功！',
+                data: res
+            }
+        } else {
+            ctx.body = {
+                code: 500,
+                msg: '修改失败！'
+            }
+        }
+    } catch (e) {
+        console.log(e);
+        ctx.body = {
+            code: 500,
+            msg: '修改失败！！'
+        }
+    }
+});
+
+/*删除文件*/
 router.delete('/list/:id', async ctx => {
     let _id = ctx.params.id;
     let [upload] = await uploadModel.find_by_id(_id);
@@ -227,7 +277,6 @@ router.delete('/list/:id', async ctx => {
         }
     }
 });
-
 
 /*router.post('/pic', upload.single('file'), async (ctx, next) => {
     console.log(ctx);

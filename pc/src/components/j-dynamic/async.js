@@ -1,3 +1,11 @@
+/**
+ * @Author: jrucker
+ * @Description
+ * @Date: 2018/10/15 9:42
+ * @Last Modified by: jrucker
+ * @Last Modified time: 2018/10/15 9:42
+ */
+
 import Vue from 'vue';
 
 let Async = {};
@@ -18,9 +26,13 @@ Async.newInstance = properties => {
   });
 
   const component = Instance.$mount();
+
   const $el = _props.$el;
   if ($el && $el !== '') {
-    document.querySelector($el).appendChild(component.$el);
+    let type = Object.prototype.toString.call($el);
+
+    if (type === '[object HTMLDivElement]') $el.appendChild(component.$el);
+    else if (type === '[object String]') document.querySelector($el).appendChild(component.$el);
   } else {
     document.body.appendChild(component.$el);
   }
@@ -29,7 +41,7 @@ Async.newInstance = properties => {
 
   return {
     show(props) {
-      Object.keys(props.props).map(k => async[k] = props.props[k])
+      if (props.data) Object.assign(async, props.data)
     },
     remove(cb) {
       const delay = _props.delay;

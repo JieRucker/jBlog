@@ -134,15 +134,15 @@ export const appRouter = [
     component: Main,
     children: [
       {
-        path: 'pic-list',
-        title: '图片列表',
-        name: 'pic-list',
+        path: 'file-upload',
+        title: '文件列表',
+        name: 'file-upload',
         icon: 'android-funnel',
-        crumb: crumb.pic_list,
+        crumb: crumb.file_upload,
         meta: {
           requiresAuth: true
         },
-        component: () => import('../views/upload/pic-list.vue'),
+        component: () => import('../views/upload/file-upload.vue'),
       },
     ]
   },

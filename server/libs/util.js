@@ -17,6 +17,7 @@ class Util {
         return true;
     }
 
+    /*格式化时间*/
     formatDate(date, format = 'YY-MM-DD hh:mm:ss') {
         let year = date.getFullYear(),
             month = date.getMonth() + 1,//月份是从0开始的
@@ -39,6 +40,23 @@ class Util {
         return fullTime;
     }
 
+    /*列表树*/
+    listToTree(list) {
+        const copyList = JSON.parse(JSON.stringify(list));
+        const tree = [];
+        for (let i = 0; i < copyList.length; i++) {
+            for (let j = 0; j < copyList.length; j++) {
+                if (copyList[i].parentId === copyList[j]._id) {
+                    if (typeof copyList[j].children === 'undefined') copyList[j].children = [];
+                    copyList[j].children.push(copyList[i])
+                }
+            }
+            // parentId为-1是根节点
+            if (copyList[i].parentId === '-1') tree.push(copyList[i])
+        }
+
+        return tree
+    }
 }
 
 module.exports = new Util();

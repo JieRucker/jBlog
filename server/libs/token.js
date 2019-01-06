@@ -22,7 +22,7 @@ module.exports = {
         return jwt.sign({
             admin_id
         }, JWT_ADD_STR, {
-            expiresIn: '1h'
+            expiresIn: '6h'
         });
     },
     async check_token(ctx, next) {

@@ -6,6 +6,7 @@ const admin = require('./admin');
 const setting = require('./setting');
 const archives = require('./archives');
 const upload = require('./upload');
+const fold = require('./fold');
 const fs = require("fs");
 const path = require('path');
 
@@ -27,4 +28,5 @@ module.exports = function (app) {
     app.use(setting.routes(), setting.allowedMethods());
     app.use(archives.routes(), archives.allowedMethods());
     app.use(upload.routes(), upload.allowedMethods());
+    app.use(fold.routes(), fold.allowedMethods());
 };

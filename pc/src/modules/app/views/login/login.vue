@@ -197,6 +197,7 @@
           return false;
         }
 
+        this.form.vericode = '';
         this.getCode();
         this.$Message.info(msg);
 

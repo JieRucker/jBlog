@@ -2,25 +2,28 @@
   @import './j-tree.scss';
 </style>
 <template>
-  <div class="j-tree-wrap" v-if="sourceList.length > 0">
+  <div class="j-tree-wrapper" v-if="sourceList.length > 0">
     <ul class="j-tree-panel">
       <tree-item
         v-for="(m,i) in sourceList"
         :key="i"
         :model="m"
         :num="i"
+        :allowDrag="allowDrag"
+        :allowDrop="allowDrop"
         :expandfunc="expand"
         :clickfunc="click"
         :plusfunc="plus"
+        :checkboxfunc="checkbox"
         :blurfunc="blur"
         :removefunc="remove"
         :cxtmenufunc="contextmenu"
         :nodes="sourceList.length"
         :trees="sourceList"
-        :showPlusIcon="showPlusIcon"
-        :showEditIcon="showEditIcon"
-        :showDeleteIcon="showDeleteIcon"
-      >
+        :showDirectoryIcon="showDirectoryIcon"
+        :showFileIcon="showFileIcon"
+        :showAllCheck="showAllCheck"
+        :shouldAction="shouldAction">
       </tree-item>
     </ul>
   </div>
@@ -32,104 +35,140 @@
   export default {
     name: "j-tree",
     components: {
-      treeItem
+      treeItem,
     },
     data() {
       return {
-        sourceList: []
+        sourceList: [],
       }
     },
     props: {
-      // 树数据
+      allowDrag: {
+        type: Function,
+        default: () => true
+      },
+      allowDrop: {
+        type: Function,
+        default: () => true
+      },
+      /*节点数据*/
       list: {
         type: Array,
         twoWay: true
       },
-      // 点击回调
+      /*点击回调*/
       click: {
         type: Function,
         default: null
       },
-      // 加号回调
+      /*新建图标回调*/
       plus: {
         type: Function,
         default: null
       },
-      // 编辑回调
+      checkbox: {
+        type: Function,
+        default: null
+      },
+      /*编辑回调*/
       blur: {
         type: Function,
         default: null
       },
-      // 删除回调
+      /*删除回调*/
       remove: {
         type: Function,
         default: null
       },
-      // 点击展开回调
+      /*展开回调*/
       expand: {
         type: Function,
         default: null
       },
-      // 右击事件
+      /*新建图标*/
+      showDirectoryIcon: {
+        type: Boolean,
+        default: true
+      },
+      /*编辑图标*/
+      showFileIcon: {
+        type: Boolean,
+        default: true
+      },
+      /*显示复选*/
+      showAllCheck: {
+        type: Boolean,
+        default: true
+      },
+      /*是否操作/预览*/
+      shouldAction: {
+        type: Boolean,
+        default: true
+      },
+      /*右键菜单*/
       contextmenu: {
         type: Function,
         default: () => {
-          console.log("右击事件");
         }
-      },
-      // 是否展开
-      isOpen: {
-        type: Boolean,
-        twoWay: true,
-        default: false
-      },
-      // 是否显示增加图标
-      showPlusIcon: {
-        type: Boolean,
-        default: true
-      },
-      // 是否显示编辑图标
-      showEditIcon: {
-        type: Boolean,
-        default: true
-      },
-      // 是否显示删除图标
-      showDeleteIcon: {
-        type: Boolean,
-        default: true
       }
     },
     watch: {
       'list': {
         handler() {
-          this.initTreeData();
+          this.initJTree();
         },
         deep: true
       }
     },
     methods: {
-      initTreeData() {
+      initJTree() {
         let copylist = JSON.parse(JSON.stringify(this.list));
 
-        // 递归操作，增加删除一些属性
-        const loop = (data) => {
-          data.forEach(m => {
-            (!m.hasOwnProperty("clickNode")) || (m.clickNode = m.hasOwnProperty("clickNode") ? m.clickNode : false);
-            (!m.hasOwnProperty("isFolder")) || (m.isFolder = m.hasOwnProperty("open") ? m.open : this.isOpen);
-            (!m.hasOwnProperty("isExpand")) || (m.isExpand = m.hasOwnProperty("open") ? m.open : this.isOpen);
-            m.childNodes = m.childNodes || [];
-            m.isEdit = false;
-            m.loadNode = 0;
-            loop(m.childNodes);
+        /*递归操作，增加删除一些属性*/
+        const loopDeepFn = d => {
+          d.map(m => {
+            m.selected = !m.hasOwnProperty("selected") ? false : m.selected;
+            m.checkbox = !m.hasOwnProperty("checkbox") ? false : m.checkbox;
+            m.openFolder = !m.hasOwnProperty("openFolder") ? false : m.openFolder;
+            m.originNodes = !m.hasOwnProperty("originNodes") ? [] : m.originNodes;
+            m.nodes = !m.hasOwnProperty("nodes") ? [] : m.nodes;
+            m.isEdit = !m.hasOwnProperty("isEdit") ? false : m.isEdit;
+            /*显示chk图标*/
+            m.showCheckbox = !m.hasOwnProperty("showCheckbox") ? true : m.showCheckbox;
+            /*显示添加图标*/
+            m.showPlusIcon = !m.hasOwnProperty("showPlusIcon") ? true : m.showPlusIcon;
+            /*显示编辑图标*/
+            m.showEditIcon = !m.hasOwnProperty("showEditIcon") ? true : m.showEditIcon;
+            /*显示删除图标*/
+            m.showDeleteIcon = !m.hasOwnProperty("showDeleteIcon") ? true : m.showDeleteIcon;
+            loopDeepFn(m.originNodes);
           })
         };
 
-        loop(copylist);
+        loopDeepFn(copylist);
         this.sourceList = copylist;
-      }
+      },
+      emitDrag(model, component, e) {
+        this.$emit('drag', model, component, e)
+      },
+      emitDragOver(model, component, e) {
+        this.$emit('drag-over', model, component, e)
+      },
+      emitDragEnter(model, component, e) {
+        this.$emit('drag-enter', model, component, e)
+      },
+      emitDragLeave(model, component, e) {
+        this.$emit('drag-leave', model, component, e)
+      },
+      emitDrop(model, component, e) {
+        this.$emit('drop', model, component, e)
+      },
+      emitDragEnd(model, to, component, e) {
+        this.$emit('drag-end', model, to, component, e)
+      },
     },
     mounted() {
-      this.initTreeData();
+      this.initJTree();
     }
   }
 </script>
